@@ -30,13 +30,23 @@ export default async function RootLayout({
     data: { user },
   } = await supabase.auth.getUser();
 
+  let username: string | null = null;
+  if (user) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("username")
+      .eq("id", user.id)
+      .single();
+    username = profile?.username ?? null;
+  }
+
   return (
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased dark`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">
-        {user && <Navbar user={user} />}
+        {user && <Navbar user={user} username={username} />}
         <main className="flex-1">{children}</main>
       </body>
     </html>

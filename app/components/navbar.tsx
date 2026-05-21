@@ -14,6 +14,7 @@ interface NavbarProps {
       avatar_url?: string;
     };
   };
+  username: string | null;
 }
 
 const navLinks = [
@@ -22,7 +23,7 @@ const navLinks = [
   { href: "/leaderboard", label: "Leaderboard" },
 ];
 
-export default function Navbar({ user }: NavbarProps) {
+export default function Navbar({ user, username }: NavbarProps) {
   const pathname = usePathname();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -133,7 +134,7 @@ export default function Navbar({ user }: NavbarProps) {
                     </div>
                     <div className="py-1">
                       <Link
-                        href="/profile"
+                      href={username ? `/profile/${username}` : "/"}
                         className="block px-4 py-2 text-sm text-muted hover:text-foreground hover:bg-surface-hover transition-colors"
                       >
                         Profile
@@ -216,7 +217,7 @@ export default function Navbar({ user }: NavbarProps) {
               })}
               <div className="border-t border-border pt-2 mt-2">
                 <Link
-                  href="/profile"
+                  href={username ? `/profile/${username}` : "/"}
                   onClick={() => setIsMobileOpen(false)}
                   className="block px-3 py-2 rounded-lg text-sm font-medium text-muted hover:text-foreground hover:bg-surface-hover transition-colors"
                 >

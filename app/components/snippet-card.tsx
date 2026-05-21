@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 import type { Tables } from "@/database.types";
 
 /* ------------------------------------------------------------------ */
@@ -84,6 +85,7 @@ export default function SnippetCard({ snippet }: SnippetCardProps) {
     snippet.code_preview ?? "// No preview available for this snippet…";
 
   return (
+    <Link href={`/snippet/${snippet.id}`} className="block">
     <motion.article
       whileHover={{ y: -6, scale: 1.015 }}
       transition={{ type: "spring", stiffness: 320, damping: 20 }}
@@ -94,7 +96,8 @@ export default function SnippetCard({ snippet }: SnippetCardProps) {
                  backdrop-blur-md
                  transition-shadow duration-300
                  hover:shadow-xl hover:shadow-indigo-500/10
-                 hover:border-indigo-500/20"
+                 hover:border-indigo-500/20
+                 cursor-pointer"
     >
       {/* ── Subtle top-edge gradient accent ── */}
       <div
@@ -233,5 +236,6 @@ export default function SnippetCard({ snippet }: SnippetCardProps) {
         </div>
       </footer>
     </motion.article>
+    </Link>
   );
 }
