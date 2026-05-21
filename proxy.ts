@@ -4,7 +4,7 @@ import { updateSession } from "@/lib/supabase/proxy";
 const publicPaths = ["/login", "/auth/callback"];
 
 export async function proxy(request: NextRequest) {
-  const { user, supabaseResponse } = await updateSession(request);
+  const { user, supabaseResponse, supabase } = await updateSession(request);
   const { pathname } = request.nextUrl;
 
   const isPublicPath = publicPaths.some((path) => pathname.startsWith(path));
@@ -21,6 +21,29 @@ export async function proxy(request: NextRequest) {
     const url = request.nextUrl.clone();
     url.pathname = "/";
     return NextResponse.redirect(url);
+  }
+
+  // Rule 3: Check onboarding status for authenticated users
+  if (user) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("id")
+      .eq("id", user.id)
+      .single();
+
+    const hasProfile = !!profile;
+
+    if (!hasProfile && pathname !== "/onboarding" && pathname !== "/auth/callback") {
+      const url = request.nextUrl.clone();
+      url.pathname = "/onboarding";
+      return NextResponse.redirect(url);
+    }
+
+    if (hasProfile && pathname === "/onboarding") {
+      const url = request.nextUrl.clone();
+      url.pathname = "/";
+      return NextResponse.redirect(url);
+    }
   }
 
   return supabaseResponse;
