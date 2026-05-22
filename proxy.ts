@@ -9,18 +9,35 @@ export async function proxy(request: NextRequest) {
 
   const isPublicPath = publicPaths.some((path) => pathname.startsWith(path));
 
+  // Helper to safely redirect while preserving Supabase session cookies
+  const safeRedirect = (url: URL) => {
+    const redirectResponse = NextResponse.redirect(url);
+    // CRITICAL: We must copy the cookies from supabaseResponse to the redirectResponse
+    // Otherwise, any refreshed session tokens are lost and the user falls into an auth loop
+    supabaseResponse.cookies.getAll().forEach((cookie) => {
+      redirectResponse.cookies.set(cookie.name, cookie.value, {
+        domain: cookie.domain,
+        path: cookie.path,
+        httpOnly: cookie.httpOnly,
+        secure: cookie.secure,
+        sameSite: cookie.sameSite,
+      });
+    });
+    return redirectResponse;
+  };
+
   // Rule 1: Unauthenticated user trying to access protected routes → redirect to /login
   if (!user && !isPublicPath) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
-    return NextResponse.redirect(url);
+    return safeRedirect(url);
   }
 
   // Rule 2: Authenticated user trying to access /login → redirect to /
   if (user && pathname === "/login") {
     const url = request.nextUrl.clone();
     url.pathname = "/";
-    return NextResponse.redirect(url);
+    return safeRedirect(url);
   }
 
   // Rule 3: Check onboarding status for authenticated users
@@ -36,13 +53,13 @@ export async function proxy(request: NextRequest) {
     if (!hasProfile && pathname !== "/onboarding" && pathname !== "/auth/callback") {
       const url = request.nextUrl.clone();
       url.pathname = "/onboarding";
-      return NextResponse.redirect(url);
+      return safeRedirect(url);
     }
 
     if (hasProfile && pathname === "/onboarding") {
       const url = request.nextUrl.clone();
       url.pathname = "/";
-      return NextResponse.redirect(url);
+      return safeRedirect(url);
     }
   }
 
