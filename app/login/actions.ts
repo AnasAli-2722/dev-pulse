@@ -69,10 +69,19 @@ export async function signUpWithEmail(formData: FormData) {
 export async function signInWithGoogle() {
   const supabase = await createClient();
 
+  // Dynamically resolve the URL for production environments (Vercel, etc.)
+  let siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL ??
+    process.env.NEXT_PUBLIC_VERCEL_URL ??
+    "http://localhost:3000";
+
+  siteUrl = siteUrl.startsWith("http") ? siteUrl : `https://${siteUrl}`;
+  siteUrl = siteUrl.endsWith("/") ? siteUrl.slice(0, -1) : siteUrl;
+
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
-      redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`,
+      redirectTo: `${siteUrl}/auth/callback`,
     },
   });
 
