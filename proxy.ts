@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { updateSession } from "@/lib/supabase/proxy";
 
-const publicPaths = ["/login", "/auth/callback"];
+const publicPaths = ["/login", "/auth/callback", "/auth/auth-code-error", "/onboarding"];
 
 export async function proxy(request: NextRequest) {
   const { user, supabaseResponse, supabase } = await updateSession(request);
@@ -9,19 +9,13 @@ export async function proxy(request: NextRequest) {
 
   const isPublicPath = publicPaths.some((path) => pathname.startsWith(path));
 
-  // Helper to safely redirect while preserving Supabase session cookies
+  // Helper to safely redirect while preserving Supabase session cookies.
+  // We copy the raw Set-Cookie headers from supabaseResponse to ensure
+  // refreshed auth tokens are never dropped during a redirect.
   const safeRedirect = (url: URL) => {
     const redirectResponse = NextResponse.redirect(url);
-    // CRITICAL: We must copy the cookies from supabaseResponse to the redirectResponse
-    // Otherwise, any refreshed session tokens are lost and the user falls into an auth loop
-    supabaseResponse.cookies.getAll().forEach((cookie) => {
-      redirectResponse.cookies.set(cookie.name, cookie.value, {
-        domain: cookie.domain,
-        path: cookie.path,
-        httpOnly: cookie.httpOnly,
-        secure: cookie.secure,
-        sameSite: cookie.sameSite,
-      });
+    supabaseResponse.headers.getSetCookie().forEach((cookie) => {
+      redirectResponse.headers.append("Set-Cookie", cookie);
     });
     return redirectResponse;
   };
