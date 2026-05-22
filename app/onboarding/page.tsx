@@ -28,8 +28,8 @@ export default function OnboardingPage() {
 
   const debouncedUsername = useDebounce(username, 400);
 
-  // Validate format
-  const isValidFormat = (val: string) => /^[a-zA-Z0-9_]{3,15}$/.test(val);
+  // Validate format (lowercase only)
+  const isValidFormat = (val: string) => /^[a-z0-9_]{3,15}$/.test(val);
 
   useEffect(() => {
     async function checkAvailability() {
@@ -45,7 +45,7 @@ export default function OnboardingPage() {
         setStatus("invalid");
         if (val.length < 3) setErrorMessage("Username must be at least 3 characters.");
         else if (val.length > 15) setErrorMessage("Username cannot exceed 15 characters.");
-        else setErrorMessage("Only letters, numbers, and underscores are allowed (no spaces).");
+        else setErrorMessage("Only lowercase letters, numbers, and underscores are allowed (no spaces).");
         return;
       }
 
@@ -84,12 +84,14 @@ export default function OnboardingPage() {
       if (userError || !user) throw new Error("Authentication error. Please sign in again.");
 
       const avatarUrl = user.user_metadata?.avatar_url ?? null;
+      const fullName = user.user_metadata?.full_name ?? null;
 
       const { error: insertError } = await supabase
         .from("profiles")
         .insert({
           id: user.id,
           username: finalUsername,
+          full_name: fullName,
           avatar_url: avatarUrl,
         });
 
@@ -146,7 +148,7 @@ export default function OnboardingPage() {
                   id="username"
                   type="text"
                   value={username}
-                  onChange={(e) => setUsername(e.target.value)}
+                  onChange={(e) => setUsername(e.target.value.toLowerCase())}
                   placeholder="e.g. anas_ali"
                   autoComplete="off"
                   autoFocus

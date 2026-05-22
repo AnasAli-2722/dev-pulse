@@ -62,22 +62,7 @@ export async function signUpWithEmail(formData: FormData) {
     };
   }
 
-  // If auto-confirm is on, create a profile entry
-  if (data.user) {
-    const username =
-      fullName?.toLowerCase().replace(/\s+/g, "_") ||
-      email.split("@")[0];
-
-    await supabase.from("profiles").upsert(
-      {
-        id: data.user.id,
-        username,
-        avatar_url: null,
-      },
-      { onConflict: "id" }
-    );
-  }
-
+  // If auto-confirm is on, the user is signed in, but proxy.ts will force them to /onboarding
   redirect("/");
 }
 

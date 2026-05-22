@@ -148,7 +148,7 @@ export default async function ProfilePage({ params }: PageProps) {
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-3 flex-wrap">
                 <h1 className="text-2xl font-bold text-white truncate">
-                  {profile.username}
+                  {profile.full_name || profile.username}
                 </h1>
                 {isOwnProfile && (
                   <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-accent/15 text-accent ring-1 ring-accent/30">
@@ -156,14 +156,17 @@ export default async function ProfilePage({ params }: PageProps) {
                   </span>
                 )}
               </div>
+              <p className="mt-1 text-sm text-slate-400 font-medium">
+                @{profile.username}
+              </p>
 
               {profile.bio && (
-                <p className="mt-2 text-sm text-slate-400 line-clamp-2 max-w-xl">
+                <p className="mt-3 text-sm text-slate-300 line-clamp-2 max-w-xl">
                   {profile.bio}
                 </p>
               )}
 
-              <div className="flex items-center gap-4 mt-3 flex-wrap">
+              <div className="flex items-center gap-4 mt-4 flex-wrap">
                 <span className="inline-flex items-center gap-1.5 text-xs text-slate-500">
                   <svg
                     className="h-3.5 w-3.5"
