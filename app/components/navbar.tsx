@@ -13,14 +13,10 @@ interface AppNotification {
   type: string;
   snippet_id: number;
   status: string;
-  sender: {
-    id: string;
-    username: string;
-    avatar_url: string | null;
-  };
-  snippet?: {
-    title: string;
-  };
+  total_count: number;
+  sender_username: string;
+  sender_avatar_url: string | null;
+  snippet_title: string | null;
 }
 
 interface NavbarProps {
@@ -61,24 +57,30 @@ export default function Navbar({ user, username }: NavbarProps) {
       if (!userData.user) return;
 
       const { data, error } = await supabase
-        .from("notifications")
-        .select(`
-          id, type, snippet_id, status,
-          sender:profiles!notifications_sender_id_fkey(id, username, avatar_url),
-          snippet:snippets!notifications_snippet_id_fkey(title)
-        `)
+        .from("bundled_notifications")
+        .select("*")
         .eq("recipient_id", userData.user.id)
-        .eq("status", "pending")
         .order("created_at", { ascending: false });
 
       if (data && !error) {
-        // Need to cast to any to handle the nested array/object mismatch from Supabase JS
-        setNotifications(data as any[]);
+        setNotifications(data as AppNotification[]);
       }
     };
     
     fetchNotifications();
   }, [user, supabase]);
+
+  const handleMarkAllAsRead = async () => {
+    setNotifications([]);
+    const { data: userData } = await supabase.auth.getUser();
+    if (!userData.user) return;
+    
+    await supabase
+      .from("notifications")
+      .update({ status: "read" })
+      .eq("recipient_id", userData.user.id)
+      .eq("status", "pending");
+  };
 
   const handleNotificationAction = async (notifId: string, action: "accepted" | "declined", snippetId: number, senderId: string) => {
     // Optimistic UI update
@@ -190,8 +192,16 @@ export default function Navbar({ user, username }: NavbarProps) {
                       transition={{ duration: 0.15 }}
                       className="absolute right-0 mt-1 w-80 rounded-xl border border-border bg-surface shadow-xl overflow-hidden z-50"
                     >
-                      <div className="px-4 py-3 border-b border-border bg-background/50">
+                      <div className="px-4 py-3 border-b border-border bg-background/50 flex items-center justify-between">
                         <h3 className="text-sm font-semibold text-foreground">Notifications</h3>
+                        {notifications.length > 0 && (
+                          <button 
+                            onClick={handleMarkAllAsRead}
+                            className="text-xs font-medium text-accent hover:text-accent-hover transition-colors"
+                          >
+                            Mark all as read
+                          </button>
+                        )}
                       </div>
                       <div className="max-h-80 overflow-y-auto custom-scrollbar">
                         {notifications.length === 0 ? (
@@ -209,33 +219,70 @@ export default function Navbar({ user, username }: NavbarProps) {
                                 exit={{ opacity: 0, height: 0 }}
                                 className="p-4 hover:bg-surface-hover/50 transition-colors"
                               >
-                                {notif.type === "collaboration_invite" && (
+                                {notif.type === "collaboration_invite" ? (
                                   <div className="flex gap-3">
-                                    {notif.sender.avatar_url ? (
-                                      <img src={notif.sender.avatar_url} alt={notif.sender.username} className="w-8 h-8 rounded-full object-cover ring-1 ring-border shrink-0" />
+                                    {notif.sender_avatar_url ? (
+                                      <img src={notif.sender_avatar_url} alt={notif.sender_username} className="w-8 h-8 rounded-full object-cover ring-1 ring-border shrink-0" />
                                     ) : (
                                       <div className="w-8 h-8 rounded-full bg-accent/20 text-accent flex items-center justify-center font-bold text-xs shrink-0 ring-1 ring-border">
-                                        {notif.sender.username.charAt(0).toUpperCase()}
+                                        {notif.sender_username.charAt(0).toUpperCase()}
                                       </div>
                                     )}
                                     <div className="flex-1 min-w-0">
                                       <p className="text-sm text-foreground leading-snug">
-                                        <span className="font-semibold">{notif.sender.username}</span> invited you to collaborate on <span className="font-semibold text-accent">{notif.snippet?.title || "a snippet"}</span>
+                                        <span className="font-semibold">{notif.sender_username}</span> invited you to collaborate on <span className="font-semibold text-accent">{notif.snippet_title || "a snippet"}</span>
                                       </p>
                                       <div className="mt-2 flex gap-2">
                                         <button 
-                                          onClick={() => handleNotificationAction(notif.id, "accepted", notif.snippet_id, notif.sender.id)}
+                                          onClick={() => handleNotificationAction(notif.id, "accepted", notif.snippet_id, "")}
                                           className="flex-1 py-1.5 px-3 rounded-lg bg-accent hover:bg-accent-hover text-white text-xs font-medium transition-colors"
                                         >
                                           Accept
                                         </button>
                                         <button 
-                                          onClick={() => handleNotificationAction(notif.id, "declined", notif.snippet_id, notif.sender.id)}
+                                          onClick={() => handleNotificationAction(notif.id, "declined", notif.snippet_id, "")}
                                           className="flex-1 py-1.5 px-3 rounded-lg bg-surface-hover hover:bg-border text-foreground text-xs font-medium transition-colors"
                                         >
                                           Decline
                                         </button>
                                       </div>
+                                    </div>
+                                  </div>
+                                ) : (
+                                  <div className="flex gap-3 items-center">
+                                    {notif.sender_avatar_url ? (
+                                      <img src={notif.sender_avatar_url} alt={notif.sender_username} className="w-8 h-8 rounded-full object-cover ring-1 ring-border shrink-0" />
+                                    ) : (
+                                      <div className="w-8 h-8 rounded-full bg-accent/20 text-accent flex items-center justify-center font-bold text-xs shrink-0 ring-1 ring-border">
+                                        {notif.sender_username.charAt(0).toUpperCase()}
+                                      </div>
+                                    )}
+                                    <div className="flex-1 min-w-0">
+                                      <p className="text-sm text-foreground leading-snug">
+                                        {notif.type === "follow" && (
+                                          <>
+                                            <span className="font-semibold">@{notif.sender_username}</span>
+                                            {notif.total_count > 9 && ` and ${notif.total_count - 1} others`}
+                                            {" started following you."}
+                                          </>
+                                        )}
+                                        {notif.type === "star" && (
+                                          <>
+                                            <span className="font-semibold">@{notif.sender_username}</span>
+                                            {notif.total_count > 9 && ` and ${notif.total_count - 1} others`}
+                                            {` starred your snippet `}
+                                            <span className="font-semibold text-accent">'{notif.snippet_title}'</span>.
+                                          </>
+                                        )}
+                                        {notif.type === "comment" && (
+                                          <>
+                                            <span className="font-semibold">@{notif.sender_username}</span>
+                                            {notif.total_count > 9 && ` and ${notif.total_count - 1} others`}
+                                            {` commented on `}
+                                            <span className="font-semibold text-accent">'{notif.snippet_title}'</span>.
+                                          </>
+                                        )}
+                                      </p>
                                     </div>
                                   </div>
                                 )}
