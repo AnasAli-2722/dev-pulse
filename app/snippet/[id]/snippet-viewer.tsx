@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Editor from "@monaco-editor/react";
 import Link from "next/link";
+import { createClient } from "@/lib/supabase/client";
 import type { SnippetDetail, Version } from "./page";
 
 /* ------------------------------------------------------------------ */
@@ -96,6 +97,68 @@ export default function SnippetViewer({
     currentVersion
   );
 
+  const supabase = createClient();
+  const [viewCount, setViewCount] = useState(snippet.view_count ?? 0);
+  const [starCount, setStarCount] = useState(snippet.star_count ?? 0);
+  const [isStarred, setIsStarred] = useState(false);
+
+  useEffect(() => {
+    let mounted = true;
+
+    // 1. Increment View Count
+    supabase.rpc("increment_view_count", { target_snippet_id: snippet.id }).then(({ error }) => {
+      if (!error && mounted) setViewCount((v) => v + 1);
+    });
+
+    // 2. Check initial star status
+    if (currentUserId) {
+      supabase
+        .from("stars")
+        .select("*")
+        .eq("snippet_id", snippet.id)
+        .eq("user_id", currentUserId)
+        .maybeSingle()
+        .then(({ data }) => {
+          if (data && mounted) setIsStarred(true);
+        });
+    }
+
+    return () => {
+      mounted = false;
+    };
+  }, [snippet.id, currentUserId]);
+
+  const toggleStar = async () => {
+    if (!currentUserId) return; // Not logged in
+
+    const prevStarred = isStarred;
+    const prevCount = starCount;
+
+    // Optimistic Update
+    setIsStarred(!prevStarred);
+    setStarCount(prevCount + (prevStarred ? -1 : 1));
+
+    if (prevStarred) {
+      const { error } = await supabase
+        .from("stars")
+        .delete()
+        .eq("snippet_id", snippet.id)
+        .eq("user_id", currentUserId);
+      if (error) {
+        setIsStarred(prevStarred);
+        setStarCount(prevCount);
+      }
+    } else {
+      const { error } = await supabase
+        .from("stars")
+        .insert({ snippet_id: snippet.id, user_id: currentUserId });
+      if (error) {
+        setIsStarred(prevStarred);
+        setStarCount(prevCount);
+      }
+    }
+  };
+
   const langName = snippet.languages?.name ?? "plaintext";
   const langKey = langName.toLowerCase();
   const langColor = LANG_COLORS[langKey] ?? {
@@ -175,19 +238,27 @@ export default function SnippetViewer({
                 </Link>
               )}
               <div className="flex items-center gap-4 text-slate-500">
-              <span
-                className="inline-flex items-center gap-1.5 text-sm"
+              <motion.button
+                onClick={toggleStar}
+                disabled={!currentUserId}
+                whileTap={{ scale: 0.9 }}
+                className={`inline-flex items-center gap-1.5 text-sm transition-colors ${
+                  isStarred ? "text-amber-400" : "hover:text-amber-400"
+                } ${!currentUserId && "opacity-50 cursor-not-allowed"}`}
                 title="Stars"
               >
-                <svg
-                  className="h-4 w-4 text-amber-400/70"
+                <motion.svg
+                  initial={false}
+                  animate={{ scale: isStarred ? [1, 1.2, 1] : 1 }}
+                  transition={{ duration: 0.2 }}
+                  className={`h-4 w-4 ${isStarred ? "text-amber-400" : "text-amber-400/70"}`}
                   viewBox="0 0 20 20"
                   fill="currentColor"
                 >
                   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.957c.3.921-.755 1.688-1.54 1.118l-3.37-2.448a1 1 0 00-1.176 0l-3.37 2.448c-.784.57-1.838-.197-1.539-1.118l1.287-3.957a1 1 0 00-.364-1.118L2.063 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69l1.286-3.957z" />
-                </svg>
-                {snippet.star_count ?? 0}
-              </span>
+                </motion.svg>
+                {starCount}
+              </motion.button>
               <span
                 className="inline-flex items-center gap-1.5 text-sm"
                 title="Views"
@@ -204,7 +275,7 @@ export default function SnippetViewer({
                     clipRule="evenodd"
                   />
                 </svg>
-                {snippet.view_count ?? 0}
+                {viewCount}
               </span>
               </div>
             </div>

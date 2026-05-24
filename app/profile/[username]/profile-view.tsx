@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { AreaChart, Area, ResponsiveContainer } from "recharts";
 import Link from "next/link";
+import { createClient } from "@/lib/supabase/client";
 import SnippetCard from "@/app/components/snippet-card";
 import type { SnippetWithAuthor } from "@/app/components/snippet-card";
 
@@ -12,6 +13,7 @@ import type { SnippetWithAuthor } from "@/app/components/snippet-card";
 /* ------------------------------------------------------------------ */
 
 export interface ProfileData {
+  id: string;
   username: string;
   full_name: string | null;
   avatar_url: string | null;
@@ -266,6 +268,62 @@ export default function ProfileView({
   isOwnProfile,
 }: ProfileViewProps) {
   const [activeTab, setActiveTab] = useState<TabId>("overview");
+  
+  // -- Follow State --
+  const supabase = createClient();
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [isFollowingLoading, setIsFollowingLoading] = useState(true);
+
+  useEffect(() => {
+    let mounted = true;
+    if (!isOwnProfile) {
+      supabase.auth.getUser().then(({ data }) => {
+        if (data.user) {
+          if (mounted) setCurrentUserId(data.user.id);
+          supabase
+            .from("followers")
+            .select("*")
+            .eq("follower_id", data.user.id)
+            .eq("following_id", profile.id)
+            .maybeSingle()
+            .then(({ data: follow }) => {
+              if (mounted) {
+                setIsFollowing(!!follow);
+                setIsFollowingLoading(false);
+              }
+            });
+        } else {
+          if (mounted) setIsFollowingLoading(false);
+        }
+      });
+    }
+    return () => { mounted = false; };
+  }, [isOwnProfile, profile.id, supabase]);
+
+  const toggleFollow = async () => {
+    if (!currentUserId) return; // Not logged in
+    
+    const prevFollowing = isFollowing;
+    
+    // Optimistic Update
+    setIsFollowing(!prevFollowing);
+    
+    if (prevFollowing) {
+      const { error } = await supabase
+        .from("followers")
+        .delete()
+        .eq("follower_id", currentUserId)
+        .eq("following_id", profile.id);
+      if (error) setIsFollowing(prevFollowing);
+    } else {
+      const { error } = await supabase
+        .from("followers")
+        .insert({ follower_id: currentUserId, following_id: profile.id });
+      if (error) setIsFollowing(prevFollowing);
+    }
+  };
+
   const reputation = profile.reputation;
   const initials = profile.username.charAt(0).toUpperCase();
 
@@ -379,7 +437,7 @@ export default function ProfileView({
             </div>
 
             {/* Edit Profile */}
-            {isOwnProfile && (
+            {isOwnProfile ? (
               <Link
                 href="/profile/edit"
                 className="relative z-10 mt-4 w-full inline-flex items-center justify-center gap-1.5 rounded-xl bg-surface hover:bg-surface-hover border border-glass-border px-4 py-2.5 text-xs font-medium text-slate-300 transition-colors"
@@ -389,6 +447,19 @@ export default function ProfileView({
                 </svg>
                 Edit Profile
               </Link>
+            ) : (
+              !isFollowingLoading && currentUserId && (
+                <button
+                  onClick={toggleFollow}
+                  className={`relative z-10 mt-4 w-full inline-flex items-center justify-center gap-1.5 rounded-xl border px-4 py-2.5 text-xs font-semibold transition-colors ${
+                    isFollowing
+                      ? "bg-slate-800/50 border-slate-700 text-slate-300 hover:bg-slate-800 hover:text-white"
+                      : "bg-accent/15 border-accent/30 text-accent hover:bg-accent/25 hover:border-accent/50"
+                  }`}
+                >
+                  {isFollowing ? "Following" : "Follow"}
+                </button>
+              )
             )}
           </div>
         </aside>

@@ -1,7 +1,9 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { createClient } from "@/lib/supabase/client";
 import type { Tables } from "@/database.types";
 
 /* ------------------------------------------------------------------ */
@@ -83,6 +85,63 @@ export default function SnippetCard({ snippet }: SnippetCardProps) {
   const langStyle = getLangStyle(langName);
   const preview =
     snippet.code_preview ?? "// No preview available for this snippet…";
+
+  const supabase = createClient();
+  const [isStarred, setIsStarred] = useState(false);
+  const [starCount, setStarCount] = useState(snippet.star_count ?? 0);
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+
+  useEffect(() => {
+    let mounted = true;
+    supabase.auth.getUser().then(({ data }) => {
+      if (data.user) {
+        if (mounted) setCurrentUserId(data.user.id);
+        supabase
+          .from("stars")
+          .select("*")
+          .eq("snippet_id", snippet.id)
+          .eq("user_id", data.user.id)
+          .maybeSingle()
+          .then(({ data: star }) => {
+            if (star && mounted) setIsStarred(true);
+          });
+      }
+    });
+    return () => {
+      mounted = false;
+    };
+  }, [snippet.id]);
+
+  const toggleStar = async (e: React.MouseEvent) => {
+    e.preventDefault(); // Prevent navigating to snippet detail
+    if (!currentUserId) return;
+
+    const prevStarred = isStarred;
+    const prevCount = starCount;
+
+    setIsStarred(!prevStarred);
+    setStarCount(prevCount + (prevStarred ? -1 : 1));
+
+    if (prevStarred) {
+      const { error } = await supabase
+        .from("stars")
+        .delete()
+        .eq("snippet_id", snippet.id)
+        .eq("user_id", currentUserId);
+      if (error) {
+        setIsStarred(prevStarred);
+        setStarCount(prevCount);
+      }
+    } else {
+      const { error } = await supabase
+        .from("stars")
+        .insert({ snippet_id: snippet.id, user_id: currentUserId });
+      if (error) {
+        setIsStarred(prevStarred);
+        setStarCount(prevCount);
+      }
+    }
+  };
 
   return (
     <Link href={`/snippet/${snippet.id}`} className="block">
@@ -191,15 +250,25 @@ export default function SnippetCard({ snippet }: SnippetCardProps) {
         {/* Stats */}
         <div className="flex items-center gap-3 text-slate-500">
           {/* Stars */}
-          <span className="inline-flex items-center gap-1 text-xs tabular-nums" title="Stars">
-            <svg
-              className="h-3.5 w-3.5 text-amber-400/70"
+          <span
+            onClick={toggleStar}
+            role="button"
+            className={`inline-flex items-center gap-1 text-xs tabular-nums transition-colors z-10 relative ${
+              isStarred ? "text-amber-400" : "hover:text-amber-400"
+            } ${!currentUserId ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+            title="Stars"
+          >
+            <motion.svg
+              initial={false}
+              animate={{ scale: isStarred ? [1, 1.3, 1] : 1 }}
+              transition={{ duration: 0.2 }}
+              className={`h-3.5 w-3.5 ${isStarred ? "text-amber-400" : "text-amber-400/70"}`}
               viewBox="0 0 20 20"
               fill="currentColor"
             >
               <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.957c.3.921-.755 1.688-1.54 1.118l-3.37-2.448a1 1 0 00-1.176 0l-3.37 2.448c-.784.57-1.838-.197-1.539-1.118l1.287-3.957a1 1 0 00-.364-1.118L2.063 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69l1.286-3.957z" />
-            </svg>
-            {snippet.star_count ?? 0}
+            </motion.svg>
+            {starCount}
           </span>
 
           {/* Forks */}
