@@ -103,7 +103,7 @@ function PodiumCard({ entry }: { entry: LeaderboardEntry }) {
     >
       <Link href={`/profile/${entry.username}`}>
         <div
-          className={`glass-card rounded-2xl p-2 sm:p-4 md:p-6 flex flex-col items-center text-center relative overflow-hidden
+          className={`glass-card rounded-2xl px-1 py-3 sm:p-4 md:p-6 flex flex-col items-center text-center relative overflow-hidden
                       transition-all duration-300 hover:scale-[1.03] cursor-pointer
                       ${meta.glow}`}
         >
@@ -112,7 +112,7 @@ function PodiumCard({ entry }: { entry: LeaderboardEntry }) {
 
           {/* Rank badge */}
           <div className={`relative z-10 mb-2 md:mb-4 flex h-6 w-6 md:h-8 md:w-8 items-center justify-center rounded-full
-                           bg-slate-900/80 ring-2 ${meta.ringColor} text-[10px] md:text-sm font-bold ${meta.iconColor}`}>
+                           bg-slate-900/80 ring-2 ${meta.ringColor} text-[9px] md:text-sm font-bold ${meta.iconColor}`}>
             {entry.rank}
           </div>
 
@@ -134,15 +134,15 @@ function PodiumCard({ entry }: { entry: LeaderboardEntry }) {
                 <img
                   src={entry.avatar_url}
                   alt={entry.username}
-                  className={`h-10 w-10 md:h-16 md:w-16 rounded-full object-cover ring-2 ring-slate-900 shadow-xl shadow-black/40
-                              ${entry.rank === 1 ? "h-12 w-12 md:h-20 md:w-20" : ""}`}
+                  className={`h-8 w-8 md:h-24 md:w-24 rounded-full object-cover ring-2 ring-slate-900 shadow-xl shadow-black/40
+                              ${entry.rank === 1 ? "h-10 w-10 md:h-28 md:w-28" : ""}`}
                 />
               ) : (
                 <div
                   className={`flex items-center justify-center rounded-full bg-gradient-to-br
                               from-indigo-500/30 to-purple-500/30 ring-2 ring-slate-900 font-bold text-indigo-300
                               shadow-xl shadow-black/40
-                              ${entry.rank === 1 ? "h-12 w-12 text-lg md:h-20 md:w-20 md:text-3xl" : "h-10 w-10 text-base md:h-16 md:w-16 md:text-2xl"}`}
+                              ${entry.rank === 1 ? "h-10 w-10 text-sm md:h-28 md:w-28 md:text-4xl" : "h-8 w-8 text-xs md:h-24 md:w-24 md:text-3xl"}`}
                 >
                   {initials}
                 </div>
@@ -151,27 +151,27 @@ function PodiumCard({ entry }: { entry: LeaderboardEntry }) {
           </div>
 
           {/* Info */}
-          <div className="relative z-10">
-            <h3 className="text-[10px] sm:text-xs md:text-base font-bold text-white truncate max-w-[60px] sm:max-w-[80px] md:max-w-[140px] leading-tight">
+          <div className="relative z-10 w-full px-1">
+            <h3 className="text-[10px] md:text-lg font-bold text-white truncate w-full leading-tight mx-auto">
               {entry.full_name || entry.username}
             </h3>
             <p className="text-xs text-slate-400 font-medium mt-0.5 hidden md:block">@{entry.username}</p>
           </div>
 
           {/* Stats */}
-          <div className="relative z-10 mt-2 md:mt-4 flex items-center gap-2 md:gap-4">
+          <div className="relative z-10 mt-1 md:mt-4 flex items-center gap-1 md:gap-4">
             <div className="text-center">
-              <p className="text-xs sm:text-sm md:text-lg font-extrabold text-white tabular-nums">
+              <p className="text-[10px] md:text-lg font-extrabold text-white tabular-nums">
                 {formatNumber(entry.reputation)}
               </p>
-              <p className="text-[8px] md:text-[10px] uppercase tracking-wider text-slate-500 font-medium leading-none mt-0.5 md:mt-0">Rep</p>
+              <p className="text-[8px] md:text-xs uppercase tracking-wider text-slate-500 font-medium leading-none mt-0.5 md:mt-0">Rep</p>
             </div>
-            <div className="h-4 md:h-6 w-px bg-white/10" />
+            <div className="h-3 md:h-6 w-px bg-white/10" />
             <div className="text-center">
-              <p className="text-xs sm:text-sm md:text-lg font-extrabold text-white tabular-nums">
+              <p className="text-[10px] md:text-lg font-extrabold text-white tabular-nums">
                 {formatNumber(entry.total_stars)}
               </p>
-              <p className="text-[8px] md:text-[10px] uppercase tracking-wider text-slate-500 font-medium leading-none mt-0.5 md:mt-0">Stars</p>
+              <p className="text-[8px] md:text-xs uppercase tracking-wider text-slate-500 font-medium leading-none mt-0.5 md:mt-0">Stars</p>
             </div>
           </div>
         </div>
@@ -230,10 +230,10 @@ function RankedRow({ entry, index }: { entry: LeaderboardEntry; index: number })
 
           {/* Name */}
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold text-slate-200 truncate group-hover:text-white transition-colors">
+            <p className="text-xs md:text-base font-semibold text-slate-200 truncate group-hover:text-white transition-colors">
               {entry.full_name || entry.username}
             </p>
-            <p className="text-[11px] text-slate-500 font-medium">@{entry.username}</p>
+            <p className="text-[10px] md:text-sm text-slate-500 font-medium truncate">@{entry.username}</p>
           </div>
 
           {/* Stars */}
@@ -276,7 +276,7 @@ export default function LeaderboardClient({ entries }: LeaderboardClientProps) {
       {/* ── Podium ── */}
       {top3.length > 0 && (
         <section className="mb-12">
-          <div className="grid grid-cols-3 gap-2 sm:gap-4 md:gap-6 items-end">
+          <div className="grid grid-cols-3 gap-1 md:gap-6 items-end">
             {top3.map((entry) => (
               <PodiumCard key={entry.username} entry={entry} />
             ))}

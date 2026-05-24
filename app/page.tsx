@@ -112,20 +112,20 @@ export default async function Home({ searchParams }: HomeProps) {
         </div>
 
         <div className="relative mx-auto max-w-7xl px-6 py-14 text-center">
-          <div className="inline-flex items-center gap-2 rounded-full border border-indigo-500/20 bg-indigo-500/10 px-4 py-1.5 text-xs font-medium text-indigo-400 mb-5">
+          <div className="inline-flex items-center gap-2 rounded-full border border-indigo-500/20 bg-indigo-500/10 px-4 py-1.5 text-[10px] md:text-xs font-medium text-indigo-400 mb-5">
             <span className="relative flex h-2 w-2">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-indigo-400 opacity-75" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-indigo-500" />
             </span>
             Community Snippets
           </div>
-          <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-white">
             Discover&nbsp;
             <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
               Code Snippets
             </span>
           </h1>
-          <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-slate-400">
+          <p className="mx-auto mt-4 max-w-xl text-sm md:text-base leading-relaxed text-slate-400">
             Browse production-ready code from the community. Star your
             favorites, fork and iterate, or share your own.
           </p>
@@ -180,10 +180,10 @@ function EmptyState({ query }: { query: string }) {
         </svg>
       </div>
 
-      <h3 className="text-lg font-semibold text-slate-200">
+      <h3 className="text-base md:text-lg font-semibold text-slate-200">
         {query ? "No snippets match your search" : "No snippets yet"}
       </h3>
-      <p className="mt-2 max-w-sm text-sm leading-relaxed text-slate-500">
+      <p className="mt-2 max-w-sm text-xs md:text-sm leading-relaxed text-slate-500">
         {query
           ? `We couldn't find any snippets matching "${query}". Try adjusting your filters or search terms.`
           : "Be the first to share a code snippet with the community. Your knowledge could help thousands of developers."}

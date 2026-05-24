@@ -75,10 +75,10 @@ export default function SettingsProfilePage() {
 
   return (
     <div className="glass-card rounded-2xl p-6 space-y-6">
-      <h2 className="text-lg font-semibold text-white">Profile</h2>
+      <h2 className="text-base md:text-lg font-semibold text-white">Profile</h2>
 
       {message && (
-        <div className={`rounded-xl px-4 py-2.5 text-sm font-medium ${message.type === "success" ? "bg-emerald-500/10 text-emerald-400 ring-1 ring-emerald-500/20" : "bg-red-500/10 text-red-400 ring-1 ring-red-500/20"}`}>
+        <div className={`rounded-xl px-4 py-2.5 text-xs md:text-sm font-medium ${message.type === "success" ? "bg-emerald-500/10 text-emerald-400 ring-1 ring-emerald-500/20" : "bg-red-500/10 text-red-400 ring-1 ring-red-500/20"}`}>
           {message.text}
         </div>
       )}
@@ -87,20 +87,20 @@ export default function SettingsProfilePage() {
       <Field label="Public Email" value={form.email_public} onChange={(v) => setForm({ ...form, email_public: v })} placeholder="hello@example.com" type="email" />
 
       <div>
-        <label className="block text-xs font-medium text-slate-400 mb-1.5">Bio</label>
+        <label className="block text-[10px] md:text-xs font-medium text-slate-400 mb-1.5">Bio</label>
         <textarea
           value={form.bio}
           onChange={(e) => setForm({ ...form, bio: e.target.value })}
           rows={3}
           maxLength={160}
           placeholder="A short bio about yourself..."
-          className="w-full rounded-xl bg-slate-950/50 border border-white/[0.06] px-4 py-2.5 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-accent/40 transition-all resize-none"
+          className="w-full rounded-xl bg-slate-950/50 border border-white/[0.06] px-4 py-2.5 text-xs md:text-sm text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-accent/40 transition-all resize-none"
         />
-        <p className="mt-1 text-[10px] text-slate-600 text-right">{form.bio.length}/160</p>
+        <p className="mt-1 text-[9px] md:text-[10px] text-slate-600 text-right">{form.bio.length}/160</p>
       </div>
 
       <div className="h-px bg-white/[0.06]" />
-      <h3 className="text-sm font-medium text-slate-300">Social Links</h3>
+      <h3 className="text-xs md:text-sm font-medium text-slate-300">Social Links</h3>
 
       <Field label="GitHub" value={form.github_url} onChange={(v) => setForm({ ...form, github_url: v })} placeholder="https://github.com/username" />
       <Field label="LinkedIn" value={form.linkedin_url} onChange={(v) => setForm({ ...form, linkedin_url: v })} placeholder="https://linkedin.com/in/username" />
@@ -109,7 +109,7 @@ export default function SettingsProfilePage() {
       <button
         onClick={handleSave}
         disabled={saving}
-        className="w-full rounded-xl bg-accent hover:bg-accent-hover disabled:opacity-50 px-4 py-2.5 text-sm font-semibold text-white transition-colors shadow-lg shadow-indigo-500/20"
+        className="w-full rounded-xl bg-accent hover:bg-accent-hover disabled:opacity-50 px-4 py-2.5 text-xs md:text-sm font-semibold text-white transition-colors shadow-lg shadow-indigo-500/20"
       >
         {saving ? "Saving..." : "Save Changes"}
       </button>
@@ -122,13 +122,13 @@ function Field({ label, value, onChange, placeholder, type = "text" }: {
 }) {
   return (
     <div>
-      <label className="block text-xs font-medium text-slate-400 mb-1.5">{label}</label>
+      <label className="block text-[10px] md:text-xs font-medium text-slate-400 mb-1.5">{label}</label>
       <input
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full rounded-xl bg-slate-950/50 border border-white/[0.06] px-4 py-2.5 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-accent/40 transition-all"
+        className="w-full rounded-xl bg-slate-950/50 border border-white/[0.06] px-4 py-2.5 text-xs md:text-sm text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-accent/40 transition-all"
       />
     </div>
   );

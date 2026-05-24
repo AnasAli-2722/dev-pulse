@@ -127,7 +127,7 @@ export default function Navbar({ user, username }: NavbarProps) {
           {/* ── Logo ── */}
           <Link href="/" className="flex items-center gap-2 group">
             <div className="pulse-dot w-2 h-2 rounded-full bg-accent" />
-            <span className="text-base font-bold tracking-tight text-foreground group-hover:text-accent-hover transition-colors">
+            <span className="text-sm md:text-base font-bold tracking-tight text-foreground group-hover:text-accent-hover transition-colors">
               Dev Pulse
             </span>
           </Link>
@@ -140,7 +140,7 @@ export default function Navbar({ user, username }: NavbarProps) {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`relative px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+                  className={`relative px-3 py-2 text-xs md:text-sm font-medium rounded-lg transition-colors ${
                     isActive
                       ? "text-foreground"
                       : "text-muted hover:text-foreground hover:bg-surface-hover"
@@ -193,11 +193,11 @@ export default function Navbar({ user, username }: NavbarProps) {
                       className="absolute right-0 mt-1 w-80 rounded-xl border border-border bg-surface shadow-xl overflow-hidden z-50"
                     >
                       <div className="px-4 py-3 border-b border-border bg-background/50 flex items-center justify-between">
-                        <h3 className="text-sm font-semibold text-foreground">Notifications</h3>
+                        <h3 className="text-xs md:text-sm font-semibold text-foreground">Notifications</h3>
                         {notifications.length > 0 && (
                           <button 
                             onClick={handleMarkAllAsRead}
-                            className="text-xs font-medium text-accent hover:text-accent-hover transition-colors"
+                            className="text-[10px] md:text-xs font-medium text-accent hover:text-accent-hover transition-colors"
                           >
                             Mark all as read
                           </button>
@@ -205,7 +205,7 @@ export default function Navbar({ user, username }: NavbarProps) {
                       </div>
                       <div className="max-h-80 overflow-y-auto custom-scrollbar">
                         {notifications.length === 0 ? (
-                          <div className="p-4 text-center text-sm text-muted">
+                          <div className="p-4 text-center text-xs md:text-sm text-muted">
                             No new notifications.
                           </div>
                         ) : (
@@ -229,19 +229,19 @@ export default function Navbar({ user, username }: NavbarProps) {
                                       </div>
                                     )}
                                     <div className="flex-1 min-w-0">
-                                      <p className="text-sm text-foreground leading-snug">
+                                      <p className="text-xs md:text-sm text-foreground leading-snug">
                                         <span className="font-semibold">{notif.sender_username}</span> invited you to collaborate on <span className="font-semibold text-accent">{notif.snippet_title || "a snippet"}</span>
                                       </p>
                                       <div className="mt-2 flex gap-2">
                                         <button 
                                           onClick={() => handleNotificationAction(notif.id, "accepted", notif.snippet_id, "")}
-                                          className="flex-1 py-1.5 px-3 rounded-lg bg-accent hover:bg-accent-hover text-white text-xs font-medium transition-colors"
+                                          className="flex-1 py-1.5 px-3 rounded-lg bg-accent hover:bg-accent-hover text-white text-[10px] md:text-xs font-medium transition-colors"
                                         >
                                           Accept
                                         </button>
                                         <button 
                                           onClick={() => handleNotificationAction(notif.id, "declined", notif.snippet_id, "")}
-                                          className="flex-1 py-1.5 px-3 rounded-lg bg-surface-hover hover:bg-border text-foreground text-xs font-medium transition-colors"
+                                          className="flex-1 py-1.5 px-3 rounded-lg bg-surface-hover hover:bg-border text-foreground text-[10px] md:text-xs font-medium transition-colors"
                                         >
                                           Decline
                                         </button>
@@ -258,7 +258,7 @@ export default function Navbar({ user, username }: NavbarProps) {
                                       </div>
                                     )}
                                     <div className="flex-1 min-w-0">
-                                      <p className="text-sm text-foreground leading-snug">
+                                      <p className="text-xs md:text-sm text-foreground leading-snug">
                                         {notif.type === "follow" && (
                                           <>
                                             <span className="font-semibold">@{notif.sender_username}</span>
@@ -319,7 +319,7 @@ export default function Navbar({ user, username }: NavbarProps) {
                     {initials}
                   </div>
                 )}
-                <span className="text-sm text-muted max-w-[120px] truncate">
+                <span className="text-xs md:text-sm text-muted max-w-[120px] truncate">
                   {displayName}
                 </span>
                 <svg
@@ -347,23 +347,23 @@ export default function Navbar({ user, username }: NavbarProps) {
                     className="absolute right-0 mt-1 w-48 rounded-xl border border-border bg-surface shadow-xl overflow-hidden"
                   >
                     <div className="px-4 py-3 border-b border-border">
-                      <p className="text-sm font-medium text-foreground truncate">
+                      <p className="text-xs md:text-sm font-medium text-foreground truncate">
                         {displayName}
                       </p>
-                      <p className="text-xs text-muted truncate">
+                      <p className="text-[10px] md:text-xs text-muted truncate">
                         {user.email}
                       </p>
                     </div>
                     <div className="py-1">
                       <Link
                       href={username ? `/profile/${username}` : "/"}
-                        className="block px-4 py-2 text-sm text-muted hover:text-foreground hover:bg-surface-hover transition-colors"
+                        className="block px-4 py-2 text-xs md:text-sm text-muted hover:text-foreground hover:bg-surface-hover transition-colors"
                       >
                         Profile
                       </Link>
                       <Link
                         href="/settings"
-                        className="block px-4 py-2 text-sm text-muted hover:text-foreground hover:bg-surface-hover transition-colors"
+                        className="block px-4 py-2 text-xs md:text-sm text-muted hover:text-foreground hover:bg-surface-hover transition-colors"
                       >
                         Settings
                       </Link>
@@ -371,7 +371,7 @@ export default function Navbar({ user, username }: NavbarProps) {
                         <button
                           type="submit"
                           id="sign-out-btn"
-                          className="w-full text-left px-4 py-2 text-sm text-error/80 hover:text-error hover:bg-surface-hover transition-colors cursor-pointer"
+                          className="w-full text-left px-4 py-2 text-xs md:text-sm text-error/80 hover:text-error hover:bg-surface-hover transition-colors cursor-pointer"
                         >
                           Sign Out
                         </button>
@@ -433,7 +433,7 @@ export default function Navbar({ user, username }: NavbarProps) {
                     key={link.href}
                     href={link.href}
                     onClick={() => setIsMobileOpen(false)}
-                    className={`block px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    className={`block px-3 py-2 rounded-lg text-xs md:text-sm font-medium transition-colors ${
                       isActive
                         ? "text-foreground bg-surface-hover"
                         : "text-muted hover:text-foreground hover:bg-surface-hover"
@@ -447,14 +447,14 @@ export default function Navbar({ user, username }: NavbarProps) {
                 <Link
                   href={username ? `/profile/${username}` : "/"}
                   onClick={() => setIsMobileOpen(false)}
-                  className="block px-3 py-2 rounded-lg text-sm font-medium text-muted hover:text-foreground hover:bg-surface-hover transition-colors"
+                  className="block px-3 py-2 rounded-lg text-xs md:text-sm font-medium text-muted hover:text-foreground hover:bg-surface-hover transition-colors"
                 >
                   Profile
                 </Link>
                 <form action={signOut}>
                   <button
                     type="submit"
-                    className="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-error/80 hover:text-error hover:bg-surface-hover transition-colors cursor-pointer"
+                    className="w-full text-left px-3 py-2 rounded-lg text-xs md:text-sm font-medium text-error/80 hover:text-error hover:bg-surface-hover transition-colors cursor-pointer"
                   >
                     Sign Out
                   </button>

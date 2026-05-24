@@ -171,13 +171,13 @@ export default function SnippetCard({ snippet }: SnippetCardProps) {
       {/* ── Header: language pill + timestamp ── */}
       <header className="flex items-center justify-between px-5 pt-5 pb-3">
         <span
-          className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold tracking-wide uppercase
+          className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[10px] md:text-xs font-semibold tracking-wide uppercase
                       ${langStyle.bg} ${langStyle.text} ring-1 ring-inset ring-current/10`}
         >
           <span className="h-1.5 w-1.5 rounded-full bg-current opacity-80" />
           {langName}
         </span>
-        <time className="text-[11px] text-slate-500 tabular-nums">
+        <time className="text-[9px] md:text-[11px] text-slate-500 tabular-nums">
           {timeAgo(snippet.updated_at ?? snippet.created_at)}
         </time>
       </header>
@@ -185,13 +185,13 @@ export default function SnippetCard({ snippet }: SnippetCardProps) {
       {/* ── Title & description ── */}
       <div className="px-5 pb-3">
         <h3
-          className="truncate text-[15px] font-semibold leading-snug text-slate-100
+          className="truncate text-sm md:text-[15px] font-semibold leading-snug text-slate-100
                       group-hover:text-white transition-colors duration-200"
         >
           {snippet.title}
         </h3>
         {snippet.description && (
-          <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-slate-400">
+          <p className="mt-1 line-clamp-2 text-[10px] md:text-xs leading-relaxed text-slate-400">
             {snippet.description}
           </p>
         )}
@@ -206,7 +206,7 @@ export default function SnippetCard({ snippet }: SnippetCardProps) {
                       ring-1 ring-white/[0.04]"
         >
           {/* Line numbers + code */}
-          <pre className="overflow-hidden text-[11px] leading-[1.7] font-mono text-slate-400">
+          <pre className="overflow-hidden text-[9px] md:text-[11px] leading-[1.7] font-mono text-slate-400">
             <code>
               {preview
                 .split("\n")
@@ -252,7 +252,7 @@ export default function SnippetCard({ snippet }: SnippetCardProps) {
               {snippet.profiles.username.charAt(0).toUpperCase()}
             </div>
           )}
-          <span className="truncate text-xs text-slate-400 font-medium group-hover:text-white transition-colors">
+          <span className="truncate text-[10px] md:text-xs text-slate-400 font-medium group-hover:text-white transition-colors">
             {snippet.profiles.username}
           </span>
         </div>
@@ -263,7 +263,7 @@ export default function SnippetCard({ snippet }: SnippetCardProps) {
           <span
             onClick={toggleStar}
             role="button"
-            className={`inline-flex items-center gap-1 text-xs tabular-nums transition-colors z-10 relative ${
+            className={`inline-flex items-center gap-1 text-[10px] md:text-xs tabular-nums transition-colors z-10 relative ${
               isStarred ? "text-amber-400" : "hover:text-amber-400"
             } ${!currentUserId ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
             title="Stars"
@@ -288,7 +288,7 @@ export default function SnippetCard({ snippet }: SnippetCardProps) {
           </span>
 
           {/* Forks */}
-          <span className="inline-flex items-center gap-1 text-xs tabular-nums" title="Forks">
+          <span className="inline-flex items-center gap-1 text-[10px] md:text-xs tabular-nums" title="Forks">
             <svg
               className="h-3.5 w-3.5 text-slate-400/70"
               viewBox="0 0 16 16"
@@ -303,7 +303,7 @@ export default function SnippetCard({ snippet }: SnippetCardProps) {
           </span>
 
           {/* Views */}
-          <span className="inline-flex items-center gap-1 text-xs tabular-nums" title="Views">
+          <span className="inline-flex items-center gap-1 text-[10px] md:text-xs tabular-nums" title="Views">
             <svg
               className="h-3.5 w-3.5 text-slate-400/70"
               viewBox="0 0 20 20"
