@@ -473,7 +473,7 @@ export default function ProfileView({
             {/* Edit Profile */}
             {isOwnProfile ? (
               <Link
-                href="/profile/edit"
+                href="/settings"
                 className="relative z-10 mt-4 w-full inline-flex items-center justify-center gap-1.5 rounded-xl bg-surface hover:bg-surface-hover border border-glass-border px-4 py-2.5 text-xs font-medium text-slate-300 transition-colors"
               >
                 <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
