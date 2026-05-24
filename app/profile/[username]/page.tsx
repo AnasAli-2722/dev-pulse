@@ -127,6 +127,17 @@ export default async function ProfilePage({ params }: PageProps) {
     0
   );
 
+  // ── 6. Follower/Following Counts ──
+  const { count: followerCount } = await supabase
+    .from("followers")
+    .select("*", { count: "exact", head: true })
+    .eq("following_id", profile.id);
+
+  const { count: followingCount } = await supabase
+    .from("followers")
+    .select("*", { count: "exact", head: true })
+    .eq("follower_id", profile.id);
+
   return (
     <div className="flex-1 pb-16">
       {/* Ambient glow */}
@@ -152,6 +163,8 @@ export default async function ProfilePage({ params }: PageProps) {
         snippets={snippets}
         starredSnippets={starredSnippets}
         totalStars={totalStars}
+        initialFollowerCount={followerCount ?? 0}
+        initialFollowingCount={followingCount ?? 0}
         isOwnProfile={isOwnProfile}
       />
     </div>

@@ -31,6 +31,8 @@ export interface ProfileViewProps {
   snippets: SnippetWithAuthor[];
   starredSnippets: SnippetWithAuthor[];
   totalStars: number;
+  initialFollowerCount: number;
+  initialFollowingCount: number;
   isOwnProfile: boolean;
 }
 
@@ -265,15 +267,20 @@ export default function ProfileView({
   snippets,
   starredSnippets,
   totalStars,
+  initialFollowerCount,
+  initialFollowingCount,
   isOwnProfile,
 }: ProfileViewProps) {
+  const supabase = createClient();
   const [activeTab, setActiveTab] = useState<TabId>("overview");
   
-  // -- Follow State --
-  const supabase = createClient();
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [isFollowing, setIsFollowing] = useState(false);
   const [isFollowingLoading, setIsFollowingLoading] = useState(true);
+  
+  const [followerCount, setFollowerCount] = useState(initialFollowerCount);
+  const [followingCount, setFollowingCount] = useState(initialFollowingCount);
+  const [showFollowModal, setShowFollowModal] = useState<"followers" | "following" | null>(null);
 
   useEffect(() => {
     let mounted = true;
@@ -305,22 +312,30 @@ export default function ProfileView({
     if (!currentUserId) return; // Not logged in
     
     const prevFollowing = isFollowing;
+    const prevFollowerCount = followerCount;
     
     // Optimistic Update
     setIsFollowing(!prevFollowing);
+    setFollowerCount(Math.max(0, prevFollowerCount + (prevFollowing ? -1 : 1)));
     
-    if (prevFollowing) {
-      const { error } = await supabase
-        .from("followers")
-        .delete()
-        .eq("follower_id", currentUserId)
-        .eq("following_id", profile.id);
-      if (error) setIsFollowing(prevFollowing);
-    } else {
-      const { error } = await supabase
-        .from("followers")
-        .insert({ follower_id: currentUserId, following_id: profile.id });
-      if (error) setIsFollowing(prevFollowing);
+    try {
+      if (prevFollowing) {
+        const { error } = await supabase
+          .from("followers")
+          .delete()
+          .eq("follower_id", currentUserId)
+          .eq("following_id", profile.id);
+        if (error) throw error;
+      } else {
+        const { error } = await supabase
+          .from("followers")
+          .insert({ follower_id: currentUserId, following_id: profile.id });
+        if (error) throw error;
+      }
+    } catch (error) {
+      console.error("Follow Action Failed:", error);
+      setIsFollowing(prevFollowing);
+      setFollowerCount(prevFollowerCount);
     }
   };
 
@@ -407,7 +422,7 @@ export default function ProfileView({
             </div>
 
             {/* Compact Stats Row */}
-            <div className="relative z-10 w-full">
+            <div className="relative z-10 w-full mb-4">
               <div
                 className="flex items-center justify-around rounded-xl py-3 px-2
                             bg-slate-950/50
@@ -429,6 +444,25 @@ export default function ProfileView({
                   <p className="text-[9px] uppercase tracking-wider text-slate-500 font-medium">Snippets</p>
                 </div>
               </div>
+            </div>
+
+            {/* Follow Stats Row */}
+            <div className="relative z-10 w-full flex items-center justify-around pb-1">
+              <button
+                onClick={() => setShowFollowModal("followers")}
+                className="flex flex-col items-center group cursor-pointer"
+              >
+                <p className="text-[13px] font-bold text-slate-200 group-hover:text-white transition-colors">{formatNumber(followerCount)}</p>
+                <p className="text-[10px] text-slate-500 group-hover:text-slate-400 transition-colors">Followers</p>
+              </button>
+              <div className="h-4 w-px bg-white/[0.06]" />
+              <button
+                onClick={() => setShowFollowModal("following")}
+                className="flex flex-col items-center group cursor-pointer"
+              >
+                <p className="text-[13px] font-bold text-slate-200 group-hover:text-white transition-colors">{formatNumber(followingCount)}</p>
+                <p className="text-[10px] text-slate-500 group-hover:text-slate-400 transition-colors">Following</p>
+              </button>
             </div>
 
             {/* Social Links */}
@@ -623,6 +657,138 @@ export default function ProfileView({
           </div>
         </div>
       </div>
+
+      {/* ── Modals ── */}
+      <AnimatePresence>
+        {showFollowModal && (
+          <FollowModal
+            type={showFollowModal}
+            profileId={profile.id}
+            onClose={() => setShowFollowModal(null)}
+          />
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  FollowModal Component                                              */
+/* ------------------------------------------------------------------ */
+
+interface FollowUser {
+  id: string;
+  username: string;
+  avatar_url: string | null;
+}
+
+function FollowModal({
+  type,
+  profileId,
+  onClose,
+}: {
+  type: "followers" | "following";
+  profileId: string;
+  onClose: () => void;
+}) {
+  const supabase = createClient();
+  const [users, setUsers] = useState<FollowUser[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let mounted = true;
+    const fetchUsers = async () => {
+      setLoading(true);
+      if (type === "followers") {
+        const { data } = await supabase
+          .from("followers")
+          .select("follower:profiles!followers_follower_id_fkey(id, username, avatar_url)")
+          .eq("following_id", profileId);
+        if (mounted && data) {
+          setUsers(data.map((d: any) => d.follower));
+        }
+      } else {
+        const { data } = await supabase
+          .from("followers")
+          .select("following:profiles!followers_following_id_fkey(id, username, avatar_url)")
+          .eq("follower_id", profileId);
+        if (mounted && data) {
+          setUsers(data.map((d: any) => d.following));
+        }
+      }
+      if (mounted) setLoading(false);
+    };
+    fetchUsers();
+    return () => {
+      mounted = false;
+    };
+  }, [type, profileId, supabase]);
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
+      {/* Backdrop */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        onClick={onClose}
+        className="absolute inset-0 bg-slate-950/60 backdrop-blur-sm cursor-pointer"
+      />
+
+      {/* Modal Content */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95, y: 10 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.95, y: 10 }}
+        transition={{ type: "spring", damping: 25, stiffness: 300 }}
+        className="relative w-full max-w-sm rounded-2xl bg-slate-900 border border-white/10 p-5 shadow-2xl flex flex-col max-h-[80vh]"
+      >
+        <div className="flex items-center justify-between mb-4 pb-3 border-b border-white/5">
+          <h2 className="text-lg font-bold text-white capitalize">{type}</h2>
+          <button
+            onClick={onClose}
+            className="text-slate-500 hover:text-white transition-colors cursor-pointer p-1"
+          >
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <div className="flex-1 overflow-y-auto space-y-3 custom-scrollbar pr-2">
+          {loading ? (
+            <div className="py-10 text-center text-slate-500 text-sm">Loading...</div>
+          ) : users.length === 0 ? (
+            <div className="py-10 text-center text-slate-500 text-sm">No {type} yet.</div>
+          ) : (
+            users.map((u) => (
+              <div key={u.id} className="flex items-center justify-between group">
+                <Link href={`/profile/${u.username}`} onClick={onClose} className="flex items-center gap-3">
+                  {u.avatar_url ? (
+                    <img src={u.avatar_url} alt={u.username} className="w-10 h-10 rounded-full object-cover ring-1 ring-white/10" />
+                  ) : (
+                    <div className="w-10 h-10 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold text-sm ring-1 ring-white/10">
+                      {u.username.charAt(0).toUpperCase()}
+                    </div>
+                  )}
+                  <div>
+                    <p className="text-sm font-semibold text-slate-200 group-hover:text-white transition-colors">
+                      {u.username}
+                    </p>
+                  </div>
+                </Link>
+                <Link
+                  href={`/profile/${u.username}`}
+                  onClick={onClose}
+                  className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-xs font-medium text-slate-300 hover:text-white transition-colors border border-white/5"
+                >
+                  View
+                </Link>
+              </div>
+            ))
+          )}
+        </div>
+      </motion.div>
     </div>
   );
 }

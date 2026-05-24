@@ -27,11 +27,6 @@ async function getSnippets(
     .eq("is_public", true)
     .eq("versions.is_current", true);
 
-  // Language filter
-  if (lang && lang !== "all") {
-    query = query.ilike("languages.name", lang);
-  }
-
   // Sort order
   switch (sort) {
     case "trending":
@@ -99,6 +94,12 @@ export default async function Home({ searchParams }: HomeProps) {
         s.description?.toLowerCase().includes(q) ||
         s.profiles.username.toLowerCase().includes(q)
     );
+  }
+
+  // Client-side-like language filter (on the server)
+  if (lang && lang !== "all") {
+    const l = lang.toLowerCase();
+    snippets = snippets.filter((s) => s.languages?.name.toLowerCase() === l);
   }
 
   return (

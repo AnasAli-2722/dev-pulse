@@ -137,7 +137,7 @@ export default function SnippetViewer({
 
     // Optimistic Update
     setIsStarred(!prevStarred);
-    setStarCount(prevCount + (prevStarred ? -1 : 1));
+    setStarCount(Math.max(0, prevCount + (prevStarred ? -1 : 1)));
 
     try {
       if (prevStarred) {
