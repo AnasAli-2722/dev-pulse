@@ -48,15 +48,17 @@ function shapeSnippets(rawSnippets: Record<string, unknown>[]): SnippetWithAutho
 /* ------------------------------------------------------------------ */
 
 export default async function ProfilePage({ params }: PageProps) {
-  const { username } = await params;
+  const { username: rawUsername } = await params;
+  const username = decodeURIComponent(rawUsername);
   const supabase = await createClient();
 
   // ── 1. Fetch profile ──
   const { data: profile, error: profileError } = await supabase
     .from("profiles")
     .select("*")
-    .eq("username", username)
-    .single();
+    .ilike("username", username)
+    .limit(1)
+    .maybeSingle();
 
   if (profileError || !profile) {
     notFound();
@@ -67,6 +69,11 @@ export default async function ProfilePage({ params }: PageProps) {
     data: { user },
   } = await supabase.auth.getUser();
   const isOwnProfile = user?.id === profile.id;
+
+  // ── 3. Privacy Check ──
+  if (profile.profile_visibility === "private" && !isOwnProfile) {
+    notFound();
+  }
 
   // ── 3. Fetch user's snippets ──
   const { data: rawSnippets } = await supabase
