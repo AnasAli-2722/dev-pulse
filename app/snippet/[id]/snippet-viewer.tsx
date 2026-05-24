@@ -6,7 +6,7 @@ import Editor from "@monaco-editor/react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import CommentSection from "./comment-section";
-import type { SnippetDetail, Version } from "./page";
+import type { SnippetDetail, Version, Collaborator } from "./page";
 
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
@@ -84,12 +84,14 @@ const LANG_COLORS: Record<string, { bg: string; text: string }> = {
 interface SnippetViewerProps {
   snippet: SnippetDetail;
   versions: Version[];
+  collaborators: Collaborator[];
   currentUserId: string | null;
 }
 
 export default function SnippetViewer({
   snippet,
   versions,
+  collaborators,
   currentUserId,
 }: SnippetViewerProps) {
   const currentVersion =
@@ -102,6 +104,51 @@ export default function SnippetViewer({
   const [viewCount, setViewCount] = useState(snippet.view_count ?? 0);
   const [starCount, setStarCount] = useState(snippet.star_count ?? 0);
   const [isStarred, setIsStarred] = useState(false);
+  const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState<{id: string, username: string, avatar_url: string | null}[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [pendingInvites, setPendingInvites] = useState<Set<string>>(new Set());
+
+  const isOwner = currentUserId === snippet.owner_id;
+  const canEdit = isOwner || collaborators.some(c => c.user_id === currentUserId);
+
+  // Debounced Search
+  useEffect(() => {
+    if (!searchQuery.trim()) {
+      setSearchResults([]);
+      return;
+    }
+    const timer = setTimeout(async () => {
+      setIsSearching(true);
+      const { data } = await supabase
+        .from("profiles")
+        .select("id, username, avatar_url")
+        .ilike("username", `%${searchQuery}%`)
+        .neq("id", currentUserId)
+        .limit(5);
+      
+      setSearchResults(data ?? []);
+      setIsSearching(false);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [searchQuery, currentUserId, supabase]);
+
+  const handleInvite = async (userId: string) => {
+    setPendingInvites(prev => new Set(prev).add(userId));
+    if (!currentUserId) return;
+    
+    try {
+      await supabase.from("notifications").insert({
+        recipient_id: userId,
+        sender_id: currentUserId,
+        type: "collaboration_invite",
+        snippet_id: snippet.id,
+      });
+    } catch (error) {
+      console.error("Invite failed", error);
+    }
+  };
 
   useEffect(() => {
     let mounted = true;
@@ -227,7 +274,7 @@ export default function SnippetViewer({
 
             {/* Stats + Edit */}
             <div className="flex items-center gap-3 shrink-0">
-              {currentUserId === snippet.owner_id && (
+              {canEdit && (
                 <Link
                   href={`/snippet/${snippet.id}/edit`}
                   className="inline-flex items-center gap-1.5 rounded-xl bg-accent/15 hover:bg-accent/25 px-4 py-2 text-xs font-semibold text-accent ring-1 ring-accent/30 transition-all duration-200"
@@ -301,6 +348,40 @@ export default function SnippetViewer({
               {timeAgo(snippet.created_at)}
             </span>
           </div>
+
+          {/* Collaborators Stack */}
+          {collaborators.length > 0 && (
+            <div className="mt-4 flex items-center gap-2">
+              <span className="text-xs text-slate-500">Collaborators:</span>
+              <div className="flex -space-x-2 overflow-hidden">
+                {collaborators.map((c) => (
+                  <Link key={c.user_id} href={`/profile/${c.profiles.username}`} title={c.profiles.username}>
+                    {c.profiles.avatar_url ? (
+                      <img src={c.profiles.avatar_url} alt={c.profiles.username} className="inline-block h-6 w-6 rounded-full ring-2 ring-slate-900 object-cover hover:ring-accent transition-colors" />
+                    ) : (
+                      <div className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-slate-800 text-[10px] font-bold text-white ring-2 ring-slate-900 hover:ring-accent transition-colors">
+                        {c.profiles.username.charAt(0).toUpperCase()}
+                      </div>
+                    )}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Add Collaborator Button */}
+          {isOwner && (
+            <button
+              onClick={() => setIsInviteModalOpen(true)}
+              className="mt-4 inline-flex items-center gap-1.5 rounded-lg border border-dashed border-white/20 bg-white/5 hover:bg-white/10 px-3 py-1.5 text-xs font-medium text-slate-300 transition-colors"
+            >
+              <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+              </svg>
+              Add Collaborator
+            </button>
+          )}
+
         </div>
       </header>
 
@@ -518,6 +599,96 @@ export default function SnippetViewer({
         {/* ── Comments ── */}
         <CommentSection snippetId={snippet.id} />
       </div>
+
+      {/* ── Invite Collaborator Modal ── */}
+      {isInviteModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            className="w-full max-w-md rounded-2xl border border-border bg-surface p-6 shadow-2xl"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-foreground">Invite Collaborator</h3>
+              <button
+                onClick={() => {
+                  setIsInviteModalOpen(false);
+                  setSearchQuery("");
+                }}
+                className="rounded-lg p-1 text-muted hover:bg-surface-hover hover:text-foreground transition-colors cursor-pointer"
+              >
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            <div className="relative mb-6">
+              <input
+                type="text"
+                placeholder="Search by username..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full rounded-xl border border-border bg-background px-4 py-2.5 pl-10 text-sm text-foreground focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+              />
+              <svg className="absolute left-3.5 top-3 h-4 w-4 text-muted" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+              </svg>
+            </div>
+
+            <div className="min-h-[200px]">
+              {isSearching ? (
+                <div className="flex h-full items-center justify-center text-sm text-muted">
+                  Searching...
+                </div>
+              ) : searchResults.length > 0 ? (
+                <ul className="space-y-2">
+                  {searchResults.map((user) => {
+                    const isAlreadyCollaborator = collaborators.some((c) => c.user_id === user.id);
+                    const isPending = pendingInvites.has(user.id);
+                    return (
+                      <li key={user.id} className="flex items-center justify-between rounded-xl p-2 hover:bg-surface-hover transition-colors">
+                        <div className="flex items-center gap-3">
+                          {user.avatar_url ? (
+                            <img src={user.avatar_url} alt={user.username} className="h-8 w-8 rounded-full object-cover ring-1 ring-border" />
+                          ) : (
+                            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-accent/20 text-xs font-bold text-accent ring-1 ring-border">
+                              {user.username.charAt(0).toUpperCase()}
+                            </div>
+                          )}
+                          <span className="text-sm font-medium text-foreground">{user.username}</span>
+                        </div>
+                        <button
+                          disabled={isAlreadyCollaborator || isPending}
+                          onClick={() => handleInvite(user.id)}
+                          className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
+                            isAlreadyCollaborator
+                              ? "bg-surface text-muted cursor-not-allowed"
+                              : isPending
+                              ? "bg-accent/20 text-accent cursor-not-allowed"
+                              : "bg-accent hover:bg-accent-hover text-white"
+                          }`}
+                        >
+                          {isAlreadyCollaborator ? "Added" : isPending ? "Pending..." : "Invite"}
+                        </button>
+                      </li>
+                    );
+                  })}
+                </ul>
+              ) : searchQuery.trim() ? (
+                <div className="flex h-full items-center justify-center text-sm text-muted">
+                  No users found.
+                </div>
+              ) : (
+                <div className="flex h-full items-center justify-center text-sm text-muted">
+                  Search for a user to invite.
+                </div>
+              )}
+            </div>
+          </motion.div>
+        </div>
+      )}
     </div>
   );
 }

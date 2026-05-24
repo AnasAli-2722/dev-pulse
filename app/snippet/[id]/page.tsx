@@ -41,6 +41,15 @@ export interface Version {
   lines_removed: number | null;
 }
 
+export interface Collaborator {
+  user_id: string;
+  role: string;
+  profiles: {
+    username: string;
+    avatar_url: string | null;
+  };
+}
+
 /* ------------------------------------------------------------------ */
 /*  Metadata                                                           */
 /* ------------------------------------------------------------------ */
@@ -108,10 +117,21 @@ export default async function SnippetPage({ params }: PageProps) {
     .eq("snippet_id", snippetId)
     .order("created_at", { ascending: false });
 
+  // Fetch collaborators
+  const { data: collaborators } = await supabase
+    .from("snippet_collaborators")
+    .select(`
+      user_id,
+      role,
+      profiles!snippet_collaborators_user_id_fkey ( username, avatar_url )
+    `)
+    .eq("snippet_id", snippetId);
+
   return (
     <SnippetViewer
       snippet={snippet as unknown as SnippetDetail}
       versions={(versions as unknown as Version[]) ?? []}
+      collaborators={(collaborators as unknown as Collaborator[]) ?? []}
       currentUserId={user?.id ?? null}
     />
   );

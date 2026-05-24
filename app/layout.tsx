@@ -48,7 +48,7 @@ export default async function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-background text-foreground relative overflow-x-hidden">
         <AuroraBackground />
-        {user && <Navbar user={user} username={username} />}
+        {user && <Navbar user={user} username={username} userId={user.id} />}
         <main className="flex-1">{children}</main>
       </body>
     </html>
