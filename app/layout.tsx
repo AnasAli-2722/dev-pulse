@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { createClient } from "@/lib/supabase/server";
 import Navbar from "./components/navbar";
+import AuroraBackground from "./components/aurora-background";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -45,7 +46,8 @@ export default async function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased dark`}
     >
-      <body className="min-h-full flex flex-col bg-background text-foreground">
+      <body className="min-h-full flex flex-col bg-background text-foreground relative overflow-x-hidden">
+        <AuroraBackground />
         {user && <Navbar user={user} username={username} />}
         <main className="flex-1">{children}</main>
       </body>
