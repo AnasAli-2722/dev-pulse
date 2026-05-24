@@ -159,6 +159,7 @@ function HeartbeatChart({ snippets }: { snippets: SnippetWithAuthor[] }) {
               filter="url(#glow)"
               dot={renderCustomDot}
               isAnimationActive={false}
+              style={{ strokeDasharray: 2000, animation: "ekgFlow 3s linear infinite" }}
             />
           </AreaChart>
         </ResponsiveContainer>

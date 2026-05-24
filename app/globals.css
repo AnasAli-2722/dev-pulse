@@ -179,7 +179,7 @@ body {
 /* ─── Heartbeat EKG Animation ───────────────────────────────────── */
 @keyframes ekgFlow {
   0% {
-    stroke-dashoffset: -1000;
+    stroke-dashoffset: 2000;
   }
   100% {
     stroke-dashoffset: 0;
@@ -187,7 +187,7 @@ body {
 }
 
 .ekg-chart .recharts-area-line {
-  stroke-dasharray: 1000;
-  animation: ekgFlow 4s linear infinite;
-  filter: drop-shadow(0 0 6px rgba(52, 211, 153, 0.7));
+  stroke-dasharray: 2000 !important;
+  animation: ekgFlow 3s linear infinite !important;
+  filter: drop-shadow(0 0 6px rgba(52, 211, 153, 0.7)) !important;
 }
