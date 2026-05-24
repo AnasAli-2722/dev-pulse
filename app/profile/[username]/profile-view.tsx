@@ -103,6 +103,19 @@ function HeartbeatChart({ snippets }: { snippets: SnippetWithAuthor[] }) {
 
   const totalActivity = snippets.length;
 
+  const renderCustomDot = (props: any) => {
+    const { cx, cy, payload } = props;
+    if (payload.day === 30) {
+      return (
+        <g key="pulse-dot">
+          <circle cx={cx} cy={cy} r={8} className="fill-emerald-400 animate-ping opacity-75" />
+          <circle cx={cx} cy={cy} r={4} className="fill-emerald-400" filter="drop-shadow(0px 0px 4px #34d399)" />
+        </g>
+      );
+    }
+    return null;
+  };
+
   return (
     <div className="glass-card rounded-2xl p-5 overflow-hidden relative">
       {/* Subtle scan-line overlay */}
@@ -121,7 +134,7 @@ function HeartbeatChart({ snippets }: { snippets: SnippetWithAuthor[] }) {
         </span>
       </div>
 
-      <div className="relative z-10 h-[100px] w-full">
+      <div className="relative z-10 h-[100px] w-full ekg-chart">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={chartData} margin={{ top: 5, right: 0, left: 0, bottom: 0 }}>
             <defs>
@@ -144,7 +157,7 @@ function HeartbeatChart({ snippets }: { snippets: SnippetWithAuthor[] }) {
               strokeWidth={1.5}
               fill="url(#pulseGradient)"
               filter="url(#glow)"
-              dot={false}
+              dot={renderCustomDot}
               isAnimationActive={false}
             />
           </AreaChart>
