@@ -139,6 +139,12 @@ export default function Navbar({ user, username }: NavbarProps) {
                       >
                         Profile
                       </Link>
+                      <Link
+                        href="/settings"
+                        className="block px-4 py-2 text-sm text-muted hover:text-foreground hover:bg-surface-hover transition-colors"
+                      >
+                        Settings
+                      </Link>
                       <form action={signOut}>
                         <button
                           type="submit"
