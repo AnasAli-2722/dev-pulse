@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import type { Tables } from "@/database.types";
 
@@ -86,6 +87,7 @@ export default function SnippetCard({ snippet }: SnippetCardProps) {
   const preview =
     snippet.code_preview ?? "// No preview available for this snippet…";
 
+  const router = useRouter();
   const supabase = createClient();
   const [isStarred, setIsStarred] = useState(false);
   const [starCount, setStarCount] = useState(snippet.star_count ?? 0);
@@ -227,22 +229,29 @@ export default function SnippetCard({ snippet }: SnippetCardProps) {
       {/* ── Footer: author + stats ── */}
       <footer
         className="flex items-center justify-between border-t border-white/[0.04]
-                    bg-slate-950/40 px-5 py-3"
+                    bg-slate-950/40 px-5 py-3 relative z-20"
       >
         {/* Author */}
-        <div className="flex items-center gap-2 min-w-0">
+        <div
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            router.push(`/profile/${snippet.profiles.username}`);
+          }}
+          className="flex items-center gap-2 min-w-0 cursor-pointer group hover:underline"
+        >
           {snippet.profiles.avatar_url ? (
             <img
               src={snippet.profiles.avatar_url}
               alt={snippet.profiles.username}
-              className="h-5 w-5 rounded-full ring-1 ring-white/10 object-cover"
+              className="h-5 w-5 rounded-full ring-1 ring-white/10 object-cover group-hover:ring-white/30 transition-all"
             />
           ) : (
-            <div className="flex h-5 w-5 items-center justify-center rounded-full bg-indigo-500/20 text-[10px] font-bold text-indigo-400 ring-1 ring-indigo-500/20">
+            <div className="flex h-5 w-5 items-center justify-center rounded-full bg-indigo-500/20 text-[10px] font-bold text-indigo-400 ring-1 ring-indigo-500/20 group-hover:ring-indigo-500/40 transition-all">
               {snippet.profiles.username.charAt(0).toUpperCase()}
             </div>
           )}
-          <span className="truncate text-xs text-slate-400 font-medium">
+          <span className="truncate text-xs text-slate-400 font-medium group-hover:text-white transition-colors">
             {snippet.profiles.username}
           </span>
         </div>
