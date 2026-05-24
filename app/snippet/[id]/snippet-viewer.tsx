@@ -139,24 +139,24 @@ export default function SnippetViewer({
     setIsStarred(!prevStarred);
     setStarCount(prevCount + (prevStarred ? -1 : 1));
 
-    if (prevStarred) {
-      const { error } = await supabase
-        .from("stars")
-        .delete()
-        .eq("snippet_id", snippet.id)
-        .eq("user_id", currentUserId);
-      if (error) {
-        setIsStarred(prevStarred);
-        setStarCount(prevCount);
+    try {
+      if (prevStarred) {
+        const { error } = await supabase
+          .from("stars")
+          .delete()
+          .eq("snippet_id", snippet.id)
+          .eq("user_id", currentUserId);
+        if (error) throw error;
+      } else {
+        const { error } = await supabase
+          .from("stars")
+          .insert({ snippet_id: snippet.id, user_id: currentUserId });
+        if (error) throw error;
       }
-    } else {
-      const { error } = await supabase
-        .from("stars")
-        .insert({ snippet_id: snippet.id, user_id: currentUserId });
-      if (error) {
-        setIsStarred(prevStarred);
-        setStarCount(prevCount);
-      }
+    } catch (error) {
+      console.error("Star Action Failed:", error);
+      setIsStarred(prevStarred);
+      setStarCount(prevCount);
     }
   };
 

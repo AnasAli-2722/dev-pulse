@@ -116,6 +116,7 @@ export default function SnippetCard({ snippet }: SnippetCardProps) {
 
   const toggleStar = async (e: React.MouseEvent) => {
     e.preventDefault(); // Prevent navigating to snippet detail
+    e.stopPropagation(); // Prevent event bubbling
     if (!currentUserId) return;
 
     const prevStarred = isStarred;
@@ -124,24 +125,24 @@ export default function SnippetCard({ snippet }: SnippetCardProps) {
     setIsStarred(!prevStarred);
     setStarCount(prevCount + (prevStarred ? -1 : 1));
 
-    if (prevStarred) {
-      const { error } = await supabase
-        .from("stars")
-        .delete()
-        .eq("snippet_id", snippet.id)
-        .eq("user_id", currentUserId);
-      if (error) {
-        setIsStarred(prevStarred);
-        setStarCount(prevCount);
+    try {
+      if (prevStarred) {
+        const { error } = await supabase
+          .from("stars")
+          .delete()
+          .eq("snippet_id", snippet.id)
+          .eq("user_id", currentUserId);
+        if (error) throw error;
+      } else {
+        const { error } = await supabase
+          .from("stars")
+          .insert({ snippet_id: snippet.id, user_id: currentUserId });
+        if (error) throw error;
       }
-    } else {
-      const { error } = await supabase
-        .from("stars")
-        .insert({ snippet_id: snippet.id, user_id: currentUserId });
-      if (error) {
-        setIsStarred(prevStarred);
-        setStarCount(prevCount);
-      }
+    } catch (error) {
+      console.error("Star Action Failed:", error);
+      setIsStarred(prevStarred);
+      setStarCount(prevCount);
     }
   };
 
@@ -273,9 +274,15 @@ export default function SnippetCard({ snippet }: SnippetCardProps) {
               transition={{ duration: 0.2 }}
               className={`h-3.5 w-3.5 ${isStarred ? "text-amber-400" : "text-amber-400/70"}`}
               viewBox="0 0 20 20"
-              fill="currentColor"
+              fill={isStarred ? "currentColor" : "none"}
+              stroke={isStarred ? "none" : "currentColor"}
+              strokeWidth={isStarred ? 0 : 1.5}
             >
-              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.957c.3.921-.755 1.688-1.54 1.118l-3.37-2.448a1 1 0 00-1.176 0l-3.37 2.448c-.784.57-1.838-.197-1.539-1.118l1.287-3.957a1 1 0 00-.364-1.118L2.063 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69l1.286-3.957z" />
+              {isStarred ? (
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.957c.3.921-.755 1.688-1.54 1.118l-3.37-2.448a1 1 0 00-1.176 0l-3.37 2.448c-.784.57-1.838-.197-1.539-1.118l1.287-3.957a1 1 0 00-.364-1.118L2.063 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69l1.286-3.957z" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+              )}
             </motion.svg>
             {starCount}
           </span>
