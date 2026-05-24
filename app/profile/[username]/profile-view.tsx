@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { AreaChart, Area, ResponsiveContainer } from "recharts";
 import Link from "next/link";
 import SnippetCard from "@/app/components/snippet-card";
 import type { SnippetWithAuthor } from "@/app/components/snippet-card";
@@ -50,95 +51,104 @@ function formatDate(dateStr: string | null): string {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Heatmap Component                                                  */
+/*  Heartbeat Pulse Chart                                              */
 /* ------------------------------------------------------------------ */
 
-function ActivityHeatmap({ snippets }: { snippets: SnippetWithAuthor[] }) {
-  // Build real activity data from snippet creation dates
-  const activityMap = useMemo(() => {
-    const map = new Map<string, number>();
+function HeartbeatChart({ snippets }: { snippets: SnippetWithAuthor[] }) {
+  const chartData = useMemo(() => {
+    // Build activity map from real snippet dates
+    const activityMap = new Map<string, number>();
     snippets.forEach((s) => {
       if (s.created_at) {
         const day = s.created_at.slice(0, 10);
-        map.set(day, (map.get(day) ?? 0) + 1);
+        activityMap.set(day, (activityMap.get(day) ?? 0) + 1);
       }
       if (s.updated_at && s.updated_at !== s.created_at) {
         const day = s.updated_at.slice(0, 10);
-        map.set(day, (map.get(day) ?? 0) + 1);
+        activityMap.set(day, (activityMap.get(day) ?? 0) + 1);
       }
     });
-    return map;
+
+    // Generate 30-day data points
+    const data: { day: number; value: number }[] = [];
+    const today = new Date();
+    for (let i = 29; i >= 0; i--) {
+      const d = new Date(today);
+      d.setDate(d.getDate() - i);
+      const key = d.toISOString().slice(0, 10);
+      const count = activityMap.get(key) ?? 0;
+      data.push({ day: 30 - i, value: count });
+    }
+
+    // Convert to heartbeat-style EKG spikes:
+    // 0 activity = flat baseline, activity = sharp spike
+    const heartbeat: { day: number; value: number }[] = [];
+    data.forEach((point) => {
+      if (point.value === 0) {
+        // Flat baseline with subtle noise
+        heartbeat.push({ day: point.day, value: 0.05 });
+      } else {
+        // EKG-style spike: dip → sharp peak → dip → settle
+        const peak = Math.min(point.value * 0.3 + 0.4, 1);
+        heartbeat.push({ day: point.day - 0.3, value: 0.05 });
+        heartbeat.push({ day: point.day - 0.15, value: -0.08 });
+        heartbeat.push({ day: point.day, value: peak });
+        heartbeat.push({ day: point.day + 0.1, value: -0.12 });
+        heartbeat.push({ day: point.day + 0.25, value: 0.05 });
+      }
+    });
+
+    return heartbeat;
   }, [snippets]);
 
-  // Generate last 20 weeks of dates (140 days)
-  const weeks = useMemo(() => {
-    const result: string[][] = [];
-    const today = new Date();
-    const totalDays = 140;
-    const startDate = new Date(today);
-    startDate.setDate(startDate.getDate() - totalDays + 1);
-    // Align to start of week (Sunday)
-    startDate.setDate(startDate.getDate() - startDate.getDay());
-
-    let currentDate = new Date(startDate);
-    let currentWeek: string[] = [];
-
-    while (currentDate <= today) {
-      currentWeek.push(currentDate.toISOString().slice(0, 10));
-      if (currentWeek.length === 7) {
-        result.push(currentWeek);
-        currentWeek = [];
-      }
-      currentDate.setDate(currentDate.getDate() + 1);
-    }
-    if (currentWeek.length > 0) {
-      result.push(currentWeek);
-    }
-    return result;
-  }, []);
-
-  const getIntensity = (dateStr: string) => {
-    const count = activityMap.get(dateStr) ?? 0;
-    if (count === 0) return "bg-slate-800/60";
-    if (count === 1) return "bg-emerald-500/30";
-    if (count === 2) return "bg-emerald-500/50";
-    if (count <= 4) return "bg-emerald-400/70";
-    return "bg-emerald-400";
-  };
-
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const totalActivity = snippets.length;
 
   return (
-    <div className="glass-card rounded-2xl p-5 overflow-hidden">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-sm font-semibold text-slate-300">Activity</h3>
-        <div className="flex items-center gap-1.5 text-[10px] text-slate-500">
-          <span>Less</span>
-          <div className="flex gap-0.5">
-            <div className="h-2.5 w-2.5 rounded-[3px] bg-slate-800/60" />
-            <div className="h-2.5 w-2.5 rounded-[3px] bg-emerald-500/30" />
-            <div className="h-2.5 w-2.5 rounded-[3px] bg-emerald-500/50" />
-            <div className="h-2.5 w-2.5 rounded-[3px] bg-emerald-400/70" />
-            <div className="h-2.5 w-2.5 rounded-[3px] bg-emerald-400" />
+    <div className="glass-card rounded-2xl p-5 overflow-hidden relative">
+      {/* Subtle scan-line overlay */}
+      <div className="pointer-events-none absolute inset-0 bg-[repeating-linear-gradient(0deg,transparent,transparent_2px,rgba(0,0,0,0.03)_2px,rgba(0,0,0,0.03)_4px)]" />
+
+      <div className="flex items-center justify-between mb-2 relative z-10">
+        <div className="flex items-center gap-2">
+          <div className="relative flex h-2 w-2">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
           </div>
-          <span>More</span>
+          <h3 className="text-sm font-semibold text-slate-300">Dev Pulse</h3>
         </div>
+        <span className="text-[10px] font-mono text-slate-500 tabular-nums">
+          {totalActivity} events · 30d
+        </span>
       </div>
 
-      <div className="overflow-x-auto">
-        <div className="flex gap-[3px] min-w-fit">
-          {weeks.map((week, wi) => (
-            <div key={wi} className="flex flex-col gap-[3px]">
-              {week.map((day) => (
-                <div
-                  key={day}
-                  className={`h-[11px] w-[11px] rounded-[3px] ${getIntensity(day)} transition-colors ring-1 ring-inset ring-white/[0.03]`}
-                  title={`${day}: ${activityMap.get(day) ?? 0} contributions`}
-                />
-              ))}
-            </div>
-          ))}
-        </div>
+      <div className="relative z-10 h-[100px] w-full">
+        <ResponsiveContainer width="100%" height="100%">
+          <AreaChart data={chartData} margin={{ top: 5, right: 0, left: 0, bottom: 0 }}>
+            <defs>
+              <linearGradient id="pulseGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#34d399" stopOpacity={0.3} />
+                <stop offset="100%" stopColor="#34d399" stopOpacity={0} />
+              </linearGradient>
+              <filter id="glow">
+                <feGaussianBlur stdDeviation="3" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+            <Area
+              type="monotone"
+              dataKey="value"
+              stroke="#34d399"
+              strokeWidth={1.5}
+              fill="url(#pulseGradient)"
+              filter="url(#glow)"
+              dot={false}
+              isAnimationActive={false}
+            />
+          </AreaChart>
+        </ResponsiveContainer>
       </div>
     </div>
   );
@@ -373,8 +383,8 @@ export default function ProfileView({
         {/*  RIGHT COLUMN — Action Hub                                   */}
         {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
         <div className="lg:col-span-9 space-y-6">
-          {/* ── Heatmap ── */}
-          <ActivityHeatmap snippets={snippets} />
+          {/* ── Heartbeat Chart ── */}
+          <HeartbeatChart snippets={snippets} />
 
           {/* ── Tab Bar ── */}
           <div className="sticky top-[3.5rem] z-30 -mx-1 px-1 pt-2 pb-1 bg-background/80 backdrop-blur-xl">
@@ -410,6 +420,7 @@ export default function ProfileView({
           </div>
 
           {/* ── Tab Content ── */}
+          <div className="min-h-[600px]">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTab}
@@ -524,6 +535,7 @@ export default function ProfileView({
               )}
             </motion.div>
           </AnimatePresence>
+          </div>
         </div>
       </div>
     </div>

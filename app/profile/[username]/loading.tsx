@@ -67,23 +67,25 @@ export default function ProfileLoading() {
 
           {/* ━━━ Right Column: Action Hub ━━━ */}
           <div className="lg:col-span-9 space-y-6">
-            {/* Heatmap skeleton */}
+            {/* Heartbeat chart skeleton */}
             <div className="glass-card rounded-2xl p-5">
-              <div className="flex items-center justify-between mb-4">
-                <div className="h-4 w-16 rounded bg-slate-800/40" />
-                <div className="h-3 w-28 rounded bg-slate-800/20" />
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2">
+                  <div className="h-2 w-2 rounded-full bg-slate-800/50" />
+                  <div className="h-4 w-16 rounded bg-slate-800/40" />
+                </div>
+                <div className="h-3 w-24 rounded bg-slate-800/20" />
               </div>
-              <div className="flex gap-[3px]">
-                {Array.from({ length: 20 }).map((_, wi) => (
-                  <div key={wi} className="flex flex-col gap-[3px]">
-                    {Array.from({ length: 7 }).map((_, di) => (
-                      <div
-                        key={di}
-                        className="h-[11px] w-[11px] rounded-[3px] bg-slate-800/50 ring-1 ring-inset ring-white/[0.03]"
-                      />
-                    ))}
-                  </div>
-                ))}
+              <div className="h-[100px] w-full rounded-lg bg-slate-800/20 relative overflow-hidden">
+                {/* Fake pulse line */}
+                <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none" viewBox="0 0 400 100">
+                  <path
+                    d="M0,60 L40,60 L50,60 L55,80 L60,20 L65,70 L70,60 L130,60 L140,60 L145,75 L150,25 L155,68 L160,60 L220,60 L230,60 L235,78 L240,15 L245,72 L250,60 L310,60 L320,60 L325,82 L330,22 L335,74 L340,60 L400,60"
+                    fill="none"
+                    stroke="rgba(52,211,153,0.15)"
+                    strokeWidth="2"
+                  />
+                </svg>
               </div>
             </div>
 
