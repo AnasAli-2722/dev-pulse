@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import Editor from "@monaco-editor/react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+import CommentSection from "./comment-section";
 import type { SnippetDetail, Version } from "./page";
 
 /* ------------------------------------------------------------------ */
@@ -241,23 +242,19 @@ export default function SnippetViewer({
               <motion.button
                 onClick={toggleStar}
                 disabled={!currentUserId}
-                whileTap={{ scale: 0.9 }}
-                className={`inline-flex items-center gap-1.5 text-sm transition-colors ${
-                  isStarred ? "text-amber-400" : "hover:text-amber-400"
+                whileTap={{ scale: 0.95 }}
+                className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border text-sm font-medium transition-all ${
+                  isStarred
+                    ? "bg-amber-400/10 border-amber-400/30 text-amber-400 hover:bg-amber-400/20 hover:border-amber-400/50"
+                    : "bg-transparent border-white/10 text-slate-400 hover:bg-slate-800 hover:text-white"
                 } ${!currentUserId && "opacity-50 cursor-not-allowed"}`}
                 title="Stars"
               >
-                <motion.svg
-                  initial={false}
-                  animate={{ scale: isStarred ? [1, 1.2, 1] : 1 }}
-                  transition={{ duration: 0.2 }}
-                  className={`h-4 w-4 ${isStarred ? "text-amber-400" : "text-amber-400/70"}`}
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.957c.3.921-.755 1.688-1.54 1.118l-3.37-2.448a1 1 0 00-1.176 0l-3.37 2.448c-.784.57-1.838-.197-1.539-1.118l1.287-3.957a1 1 0 00-.364-1.118L2.063 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69l1.286-3.957z" />
-                </motion.svg>
-                {starCount}
+                <span>{isStarred ? "★" : "☆"}</span>
+                <span>{isStarred ? "Starred" : "Star"}</span>
+                <span className={`ml-1 pl-2 border-l ${isStarred ? "border-amber-400/30" : "border-white/10"} text-xs font-semibold tabular-nums`}>
+                  {starCount}
+                </span>
               </motion.button>
               <span
                 className="inline-flex items-center gap-1.5 text-sm"
@@ -283,20 +280,22 @@ export default function SnippetViewer({
 
           {/* Author */}
           <div className="flex items-center gap-2 mt-4">
-            {snippet.profiles.avatar_url ? (
-              <img
-                src={snippet.profiles.avatar_url}
-                alt={snippet.profiles.username}
-                className="h-6 w-6 rounded-full ring-1 ring-white/10 object-cover"
-              />
-            ) : (
-              <div className="flex h-6 w-6 items-center justify-center rounded-full bg-indigo-500/20 text-[10px] font-bold text-indigo-400 ring-1 ring-indigo-500/20">
-                {snippet.profiles.username.charAt(0).toUpperCase()}
-              </div>
-            )}
-            <span className="text-sm text-slate-400">
-              {snippet.profiles.username}
-            </span>
+            <Link href={`/profile/${snippet.profiles.username}`} className="flex items-center gap-2 hover:underline cursor-pointer group">
+              {snippet.profiles.avatar_url ? (
+                <img
+                  src={snippet.profiles.avatar_url}
+                  alt={snippet.profiles.username}
+                  className="h-6 w-6 rounded-full ring-1 ring-white/10 object-cover"
+                />
+              ) : (
+                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-indigo-500/20 text-[10px] font-bold text-indigo-400 ring-1 ring-indigo-500/20">
+                  {snippet.profiles.username.charAt(0).toUpperCase()}
+                </div>
+              )}
+              <span className="text-sm text-slate-400 group-hover:text-white transition-colors">
+                {snippet.profiles.username}
+              </span>
+            </Link>
             <span className="text-slate-600">·</span>
             <span className="text-xs text-slate-500">
               {timeAgo(snippet.created_at)}
@@ -515,6 +514,9 @@ export default function SnippetViewer({
             </div>
           </div>
         </div>
+
+        {/* ── Comments ── */}
+        <CommentSection snippetId={snippet.id} />
       </div>
     </div>
   );
