@@ -112,8 +112,8 @@ function HeartbeatChart({ snippets }: { snippets: SnippetWithAuthor[] }) {
     if (payload.day === 30) {
       return (
         <g key="pulse-dot">
-          <circle cx={cx} cy={cy} r={8} className="fill-emerald-400 animate-ping opacity-75" />
-          <circle cx={cx} cy={cy} r={4} className="fill-emerald-400" filter="drop-shadow(0px 0px 4px #34d399)" />
+          <circle cx={cx} cy={cy} r={8} className="fill-accent animate-ping opacity-75" />
+          <circle cx={cx} cy={cy} r={4} className="fill-accent" filter="drop-shadow(0px 0px 4px var(--accent))" />
         </g>
       );
     }
@@ -128,8 +128,8 @@ function HeartbeatChart({ snippets }: { snippets: SnippetWithAuthor[] }) {
       <div className="flex items-center justify-between mb-2 relative z-10">
         <div className="flex items-center gap-2">
           <div className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-success opacity-75" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-success" />
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
           </div>
           <h3 className="text-sm font-semibold text-foreground">Dev Pulse</h3>
         </div>
@@ -143,8 +143,8 @@ function HeartbeatChart({ snippets }: { snippets: SnippetWithAuthor[] }) {
           <AreaChart data={chartData} margin={{ top: 5, right: 0, left: 0, bottom: 0 }}>
             <defs>
               <linearGradient id="pulseGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#34d399" stopOpacity={0.3} />
-                <stop offset="100%" stopColor="#34d399" stopOpacity={0} />
+                <stop offset="0%" stopColor="var(--accent)" stopOpacity={0.3} />
+                <stop offset="100%" stopColor="var(--accent)" stopOpacity={0} />
               </linearGradient>
               <filter id="glow">
                 <feGaussianBlur stdDeviation="3" result="blur" />
@@ -157,7 +157,7 @@ function HeartbeatChart({ snippets }: { snippets: SnippetWithAuthor[] }) {
             <Area
               type="monotone"
               dataKey="value"
-              stroke="#34d399"
+              stroke="var(--accent)"
               strokeWidth={1.5}
               fill="url(#pulseGradient)"
               filter="url(#glow)"
