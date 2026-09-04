@@ -148,14 +148,14 @@ export default function EditSnippetForm({
   return (
     <div className="flex-1 pb-16">
       {/* ── Header ── */}
-      <header className="relative overflow-hidden border-b border-white/[0.04] bg-gradient-to-b from-slate-900/50 to-transparent">
+      <header className="relative overflow-hidden border-b border-glass-border bg-gradient-to-b from-background/50 to-transparent">
         <div className="pointer-events-none absolute inset-0">
-          <div className="absolute left-1/2 top-0 -translate-x-1/2 h-[200px] w-[500px] rounded-full bg-indigo-500/[0.06] blur-[80px]" />
+          <div className="absolute left-1/2 top-0 -translate-x-1/2 h-[200px] w-[500px] rounded-full bg-accent/[0.06] blur-[80px]" />
         </div>
         <div className="relative mx-auto max-w-4xl px-6 py-8">
           {/* Breadcrumb */}
-          <div className="flex items-center gap-2 text-xs text-slate-500 mb-4">
-            <Link href="/" className="hover:text-slate-300 transition-colors">
+          <div className="flex items-center gap-2 text-xs text-muted mb-4">
+            <Link href="/" className="hover:text-foreground transition-colors">
               Home
             </Link>
             <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
@@ -163,14 +163,14 @@ export default function EditSnippetForm({
             </svg>
             <Link
               href={`/snippet/${snippet.id}`}
-              className="hover:text-slate-300 transition-colors"
+              className="hover:text-foreground transition-colors"
             >
               {snippet.title}
             </Link>
             <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
             </svg>
-            <span className="text-slate-400">Edit</span>
+            <span className="text-muted">Edit</span>
           </div>
 
           <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/20 bg-amber-500/10 px-3 py-1 text-xs font-medium text-amber-400 mb-4">
@@ -183,7 +183,7 @@ export default function EditSnippetForm({
             {snippet.title}
           </h1>
           {snippet.description && (
-            <p className="mt-2 text-sm text-slate-400">{snippet.description}</p>
+            <p className="mt-2 text-sm text-muted">{snippet.description}</p>
           )}
         </div>
       </header>
@@ -203,12 +203,12 @@ export default function EditSnippetForm({
 
         <div className="glass-card rounded-2xl overflow-hidden">
           {/* Editor toolbar */}
-          <div className="flex items-center justify-between border-b border-white/[0.04] bg-[#1e1e1e] px-4 py-2.5">
+          <div className="flex items-center justify-between border-b border-glass-border bg-[#1e1e1e] px-4 py-2.5">
             <div className="flex items-center gap-1.5">
               <div className="h-3 w-3 rounded-full bg-red-500/60" />
               <div className="h-3 w-3 rounded-full bg-yellow-500/60" />
               <div className="h-3 w-3 rounded-full bg-green-500/60" />
-              <span className="ml-3 text-[11px] text-slate-500 font-mono">
+              <span className="ml-3 text-[11px] text-muted font-mono">
                 {snippet.title}{snippet.languages?.extension ?? ".txt"}
               </span>
             </div>
@@ -216,8 +216,8 @@ export default function EditSnippetForm({
               {hasChanges && (
                 <span className="text-amber-400/80 font-medium">Modified</span>
               )}
-              <span className="text-slate-600">{lineCount} lines</span>
-              <span className="text-slate-600">{charCount} chars</span>
+              <span className="text-muted">{lineCount} lines</span>
+              <span className="text-muted">{charCount} chars</span>
             </div>
           </div>
 
@@ -250,7 +250,7 @@ export default function EditSnippetForm({
               }}
               loading={
                 <div className="flex items-center justify-center h-[520px] bg-[#1e1e1e]">
-                  <div className="flex items-center gap-3 text-slate-500">
+                  <div className="flex items-center gap-3 text-muted">
                     <svg className="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
@@ -267,13 +267,13 @@ export default function EditSnippetForm({
         <div className="mt-6 glass-card rounded-2xl p-5">
           <label
             htmlFor="commit-msg"
-            className="block text-xs font-medium text-slate-400 mb-1.5 uppercase tracking-wider"
+            className="block text-xs font-medium text-muted mb-1.5 uppercase tracking-wider"
           >
             Commit Message
           </label>
           <div className="relative">
             <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
-              <svg className="h-4 w-4 text-slate-600" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+              <svg className="h-4 w-4 text-muted" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.076-4.076a1.526 1.526 0 0 1 1.037-.443 48.282 48.282 0 0 0 5.68-.494c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z" />
               </svg>
             </div>
@@ -284,7 +284,7 @@ export default function EditSnippetForm({
               onChange={(e) => setCommitMsg(e.target.value)}
               placeholder="What did you change?"
               maxLength={200}
-              className="input-field w-full rounded-xl border border-glass-border bg-slate-950/60 px-4 py-3 pl-11 text-sm text-slate-200 placeholder:text-slate-600 outline-none"
+              className="input-field w-full rounded-xl border border-glass-border bg-background/60 px-4 py-3 pl-11 text-sm text-foreground placeholder:text-muted outline-none"
             />
           </div>
         </div>
@@ -293,7 +293,7 @@ export default function EditSnippetForm({
         <div className="flex items-center justify-between mt-6">
           <Link
             href={`/snippet/${snippet.id}`}
-            className="text-sm text-slate-500 hover:text-slate-300 transition-colors"
+            className="text-sm text-muted hover:text-foreground transition-colors"
           >
             ← Cancel
           </Link>
@@ -307,7 +307,7 @@ export default function EditSnippetForm({
             id="commit-changes-btn"
             className="inline-flex items-center gap-2 rounded-xl bg-accent hover:bg-accent-hover
                        px-6 py-3 text-sm font-semibold text-white transition-colors duration-200
-                       shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/30
+                       shadow-lg shadow-accent/20 hover:shadow-accent/30
                        disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
           >
             {isSubmitting || isPending ? (

@@ -57,24 +57,24 @@ function timeAgo(dateStr: string | null): string {
 const LANG_COLORS: Record<string, { bg: string; text: string }> = {
   javascript: { bg: "bg-amber-400/15", text: "text-amber-400" },
   typescript: { bg: "bg-blue-400/15", text: "text-blue-400" },
-  python: { bg: "bg-emerald-400/15", text: "text-emerald-400" },
+  python: { bg: "bg-success/15", text: "text-success" },
   rust: { bg: "bg-orange-400/15", text: "text-orange-400" },
   go: { bg: "bg-cyan-400/15", text: "text-cyan-400" },
   java: { bg: "bg-red-400/15", text: "text-red-400" },
-  c: { bg: "bg-slate-400/15", text: "text-slate-400" },
+  c: { bg: "bg-surface-hover/15", text: "text-muted" },
   "c++": { bg: "bg-pink-400/15", text: "text-pink-400" },
   "c#": { bg: "bg-violet-400/15", text: "text-violet-400" },
   ruby: { bg: "bg-rose-400/15", text: "text-rose-400" },
   swift: { bg: "bg-orange-300/15", text: "text-orange-300" },
-  kotlin: { bg: "bg-purple-400/15", text: "text-purple-400" },
+  kotlin: { bg: "bg-accent-hover/15", text: "text-purple-400" },
   dart: { bg: "bg-sky-400/15", text: "text-sky-400" },
-  php: { bg: "bg-indigo-400/15", text: "text-indigo-400" },
+  php: { bg: "bg-accent/15", text: "text-accent" },
   html: { bg: "bg-orange-500/15", text: "text-orange-500" },
   css: { bg: "bg-blue-500/15", text: "text-blue-500" },
   sql: { bg: "bg-yellow-400/15", text: "text-yellow-400" },
   shell: { bg: "bg-green-400/15", text: "text-green-400" },
   bash: { bg: "bg-green-400/15", text: "text-green-400" },
-  lua: { bg: "bg-indigo-300/15", text: "text-indigo-300" },
+  lua: { bg: "bg-accent/15", text: "text-accent" },
 };
 
 /* ------------------------------------------------------------------ */
@@ -210,8 +210,8 @@ export default function SnippetViewer({
   const langName = snippet.languages?.name ?? "plaintext";
   const langKey = langName.toLowerCase();
   const langColor = LANG_COLORS[langKey] ?? {
-    bg: "bg-slate-500/15",
-    text: "text-slate-400",
+    bg: "bg-surface-hover/15",
+    text: "text-muted",
   };
   const monacoLang = toMonacoLang(langName);
   const code = selectedVersion?.code ?? "// No code available";
@@ -220,17 +220,17 @@ export default function SnippetViewer({
   return (
     <div className="flex-1 pb-12">
       {/* ── Header ── */}
-      <header className="relative overflow-hidden border-b border-white/[0.04] bg-gradient-to-b from-slate-900/50 to-transparent">
+      <header className="relative overflow-hidden border-b border-glass-border bg-gradient-to-b from-background/50 to-transparent">
         <div className="pointer-events-none absolute inset-0">
-          <div className="absolute left-1/2 top-0 -translate-x-1/2 h-[200px] w-[500px] rounded-full bg-indigo-500/[0.06] blur-[80px]" />
+          <div className="absolute left-1/2 top-0 -translate-x-1/2 h-[200px] w-[500px] rounded-full bg-accent/[0.06] blur-[80px]" />
         </div>
 
         <div className="relative mx-auto max-w-7xl px-6 py-8">
           {/* Breadcrumb */}
-          <div className="flex items-center gap-2 text-xs text-slate-500 mb-4">
+          <div className="flex items-center gap-2 text-xs text-muted mb-4">
             <Link
               href="/"
-              className="hover:text-slate-300 transition-colors"
+              className="hover:text-foreground transition-colors"
             >
               Home
             </Link>
@@ -247,7 +247,7 @@ export default function SnippetViewer({
                 d="m8.25 4.5 7.5 7.5-7.5 7.5"
               />
             </svg>
-            <span className="text-slate-400">{snippet.title}</span>
+            <span className="text-muted">{snippet.title}</span>
           </div>
 
           {/* Title row */}
@@ -266,7 +266,7 @@ export default function SnippetViewer({
                 </span>
               </div>
               {snippet.description && (
-                <p className="text-sm text-slate-400 line-clamp-2 max-w-2xl">
+                <p className="text-sm text-muted line-clamp-2 max-w-2xl">
                   {snippet.description}
                 </p>
               )}
@@ -285,7 +285,7 @@ export default function SnippetViewer({
                   Edit
                 </Link>
               )}
-              <div className="flex items-center gap-4 text-slate-500">
+              <div className="flex items-center gap-4 text-muted">
               <motion.button
                 onClick={toggleStar}
                 disabled={!currentUserId}
@@ -293,7 +293,7 @@ export default function SnippetViewer({
                 className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border text-sm font-medium transition-all ${
                   isStarred
                     ? "bg-amber-400/10 border-amber-400/30 text-amber-400 hover:bg-amber-400/20 hover:border-amber-400/50"
-                    : "bg-transparent border-white/10 text-slate-400 hover:bg-slate-800 hover:text-white"
+                    : "bg-transparent border-white/10 text-muted hover:bg-surface-hover hover:text-white"
                 } ${!currentUserId && "opacity-50 cursor-not-allowed"}`}
                 title="Stars"
               >
@@ -308,7 +308,7 @@ export default function SnippetViewer({
                 title="Views"
               >
                 <svg
-                  className="h-4 w-4 text-slate-400/70"
+                  className="h-4 w-4 text-muted/70"
                   viewBox="0 0 20 20"
                   fill="currentColor"
                 >
@@ -335,16 +335,16 @@ export default function SnippetViewer({
                   className="h-6 w-6 rounded-full ring-1 ring-white/10 object-cover"
                 />
               ) : (
-                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-indigo-500/20 text-[10px] font-bold text-indigo-400 ring-1 ring-indigo-500/20">
+                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-accent/20 text-[10px] font-bold text-accent ring-1 ring-accent/20">
                   {snippet.profiles.username.charAt(0).toUpperCase()}
                 </div>
               )}
-              <span className="text-sm text-slate-400 group-hover:text-white transition-colors">
+              <span className="text-sm text-muted group-hover:text-white transition-colors">
                 {snippet.profiles.username}
               </span>
             </Link>
-            <span className="text-slate-600">·</span>
-            <span className="text-xs text-slate-500">
+            <span className="text-muted">·</span>
+            <span className="text-xs text-muted">
               {timeAgo(snippet.created_at)}
             </span>
           </div>
@@ -352,14 +352,14 @@ export default function SnippetViewer({
           {/* Collaborators Stack */}
           {collaborators.length > 0 && (
             <div className="mt-4 flex items-center gap-2">
-              <span className="text-xs text-slate-500">Collaborators:</span>
+              <span className="text-xs text-muted">Collaborators:</span>
               <div className="flex -space-x-2 overflow-hidden">
                 {collaborators.map((c) => (
                   <Link key={c.user_id} href={`/profile/${c.profiles.username}`} title={c.profiles.username}>
                     {c.profiles.avatar_url ? (
-                      <img src={c.profiles.avatar_url} alt={c.profiles.username} className="inline-block h-6 w-6 rounded-full ring-2 ring-slate-900 object-cover hover:ring-accent transition-colors" />
+                      <img src={c.profiles.avatar_url} alt={c.profiles.username} className="inline-block h-6 w-6 rounded-full ring-2 ring-glass-border object-cover hover:ring-accent transition-colors" />
                     ) : (
-                      <div className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-slate-800 text-[10px] font-bold text-white ring-2 ring-slate-900 hover:ring-accent transition-colors">
+                      <div className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-surface-hover text-[10px] font-bold text-white ring-2 ring-glass-border hover:ring-accent transition-colors">
                         {c.profiles.username.charAt(0).toUpperCase()}
                       </div>
                     )}
@@ -373,7 +373,7 @@ export default function SnippetViewer({
           {isOwner && (
             <button
               onClick={() => setIsInviteModalOpen(true)}
-              className="mt-4 inline-flex items-center gap-1.5 rounded-lg border border-dashed border-white/20 bg-white/5 hover:bg-white/10 px-3 py-1.5 text-xs font-medium text-slate-300 transition-colors"
+              className="mt-4 inline-flex items-center gap-1.5 rounded-lg border border-dashed border-white/20 bg-white/5 hover:bg-white/10 px-3 py-1.5 text-xs font-medium text-foreground transition-colors"
             >
               <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -392,17 +392,17 @@ export default function SnippetViewer({
           <div className="flex-1 lg:w-3/4 min-w-0">
             <div className="glass-card rounded-2xl overflow-hidden">
               {/* Editor toolbar */}
-              <div className="flex items-center justify-between border-b border-white/[0.04] bg-[#1e1e1e] px-4 py-2.5">
+              <div className="flex items-center justify-between border-b border-glass-border bg-[#1e1e1e] px-4 py-2.5">
                 <div className="flex items-center gap-1.5">
                   <div className="h-3 w-3 rounded-full bg-red-500/60" />
                   <div className="h-3 w-3 rounded-full bg-yellow-500/60" />
                   <div className="h-3 w-3 rounded-full bg-green-500/60" />
-                  <span className="ml-3 text-[11px] text-slate-500 font-mono">
+                  <span className="ml-3 text-[11px] text-muted font-mono">
                     {snippet.title}
                     {snippet.languages?.extension ?? ".txt"}
                   </span>
                 </div>
-                <div className="flex items-center gap-3 text-[11px] text-slate-600 tabular-nums">
+                <div className="flex items-center gap-3 text-[11px] text-muted tabular-nums">
                   {selectedVersion && (
                     <span className="text-accent/70">
                       v{selectedVersion.version_number}
@@ -445,7 +445,7 @@ export default function SnippetViewer({
                   }}
                   loading={
                     <div className="flex items-center justify-center h-[560px] bg-[#1e1e1e]">
-                      <div className="flex items-center gap-3 text-slate-500">
+                      <div className="flex items-center gap-3 text-muted">
                         <svg
                           className="animate-spin h-5 w-5"
                           fill="none"
@@ -477,7 +477,7 @@ export default function SnippetViewer({
           {/* ── Right: Version Timeline (25%) ── */}
           <div className="lg:w-1/4 shrink-0">
             <div className="glass-card rounded-2xl p-4 sticky top-20">
-              <h2 className="flex items-center gap-2 text-sm font-semibold text-slate-200 mb-4">
+              <h2 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-4">
                 <svg
                   className="h-4 w-4 text-accent"
                   fill="none"
@@ -492,13 +492,13 @@ export default function SnippetViewer({
                   />
                 </svg>
                 Version History
-                <span className="ml-auto text-xs text-slate-600 font-normal tabular-nums">
+                <span className="ml-auto text-xs text-muted font-normal tabular-nums">
                   {versions.length} version{versions.length !== 1 && "s"}
                 </span>
               </h2>
 
               {versions.length === 0 ? (
-                <p className="text-xs text-slate-600 text-center py-8">
+                <p className="text-xs text-muted text-center py-8">
                   No versions recorded yet.
                 </p>
               ) : (
@@ -517,7 +517,7 @@ export default function SnippetViewer({
                           ${
                             isSelected
                               ? "bg-accent/10 ring-1 ring-accent/40 shadow-sm shadow-accent/10"
-                              : "bg-slate-900/40 ring-1 ring-white/[0.04] hover:bg-slate-800/60 hover:ring-white/[0.08]"
+                              : "bg-background/40 ring-1 ring-white/[0.04] hover:bg-surface-hover/60 hover:ring-white/[0.08]"
                           }`}
                       >
                         {/* Active indicator line */}
@@ -538,13 +538,13 @@ export default function SnippetViewer({
                             className={`text-xs font-bold tabular-nums ${
                               isSelected
                                 ? "text-accent"
-                                : "text-slate-400"
+                                : "text-muted"
                             }`}
                           >
                             v{version.version_number}
                           </span>
                           {isLatest && (
-                            <span className="text-[9px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 ring-1 ring-emerald-500/20">
+                            <span className="text-[9px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-success/15 text-success ring-1 ring-success/20">
                               Latest
                             </span>
                           )}
@@ -558,15 +558,15 @@ export default function SnippetViewer({
                         <p
                           className={`text-xs leading-relaxed truncate ${
                             isSelected
-                              ? "text-slate-200"
-                              : "text-slate-400"
+                              ? "text-foreground"
+                              : "text-muted"
                           }`}
                         >
                           {version.commit_msg ?? "No message"}
                         </p>
 
                         <div className="flex items-center justify-between mt-2">
-                          <span className="text-[10px] text-slate-600 tabular-nums">
+                          <span className="text-[10px] text-muted tabular-nums">
                             {timeAgo(version.created_at)}
                           </span>
                           {(version.lines_added !== null ||
@@ -574,7 +574,7 @@ export default function SnippetViewer({
                             <div className="flex items-center gap-1.5 text-[10px] tabular-nums">
                               {version.lines_added !== null &&
                                 version.lines_added > 0 && (
-                                  <span className="text-emerald-500/70">
+                                  <span className="text-success/70">
                                     +{version.lines_added}
                                   </span>
                                 )}

@@ -24,7 +24,7 @@ function Toggle({
       disabled={disabled}
       onClick={() => onChange(!enabled)}
       className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/50
-                  ${enabled ? "bg-accent" : "bg-slate-700"}
+                  ${enabled ? "bg-accent" : "bg-surface-hover"}
                   ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
     >
       <span
@@ -54,12 +54,12 @@ function NotificationRow({
 }) {
   return (
     <div className="flex items-center justify-between gap-4 rounded-xl px-4 py-3.5
-                    bg-slate-950/50
+                    bg-background/50
                     shadow-[inset_1px_1px_4px_rgba(0,0,0,0.4),inset_-1px_-1px_3px_rgba(255,255,255,0.02)]
                     ring-1 ring-white/[0.04]">
       <div>
-        <p className="text-sm font-medium text-slate-200">{title}</p>
-        <p className="text-[11px] text-slate-500 mt-0.5">{description}</p>
+        <p className="text-sm font-medium text-foreground">{title}</p>
+        <p className="text-[11px] text-muted mt-0.5">{description}</p>
       </div>
       <Toggle enabled={enabled} onChange={onChange} disabled={saving} />
     </div>
@@ -133,9 +133,9 @@ export default function NotificationsPage() {
   if (loading) {
     return (
       <div className="glass-card rounded-2xl p-8 animate-pulse space-y-3">
-        <div className="h-5 w-40 rounded bg-slate-800/40 mb-4" />
+        <div className="h-5 w-40 rounded bg-surface-hover/40 mb-4" />
         {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="h-16 w-full rounded-xl bg-slate-800/30" />
+          <div key={i} className="h-16 w-full rounded-xl bg-surface-hover/30" />
         ))}
       </div>
     );
@@ -144,7 +144,7 @@ export default function NotificationsPage() {
   return (
     <div className="glass-card rounded-2xl p-6">
       <h2 className="text-lg font-semibold text-white mb-1">Notifications</h2>
-      <p className="text-xs text-slate-500 mb-6">Choose what you want to be notified about.</p>
+      <p className="text-xs text-muted mb-6">Choose what you want to be notified about.</p>
 
       <div className="space-y-2.5">
         {NOTIF_CONFIG.map((item) => (

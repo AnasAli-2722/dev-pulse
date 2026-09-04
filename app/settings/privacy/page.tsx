@@ -25,19 +25,19 @@ function SelectField({
   return (
     <div
       className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 rounded-xl px-4 py-4
-                  bg-slate-950/50
+                  bg-background/50
                   shadow-[inset_1px_1px_4px_rgba(0,0,0,0.4),inset_-1px_-1px_3px_rgba(255,255,255,0.02)]
                   ring-1 ring-white/[0.04]"
     >
       <div className="min-w-0">
-        <p className="text-sm font-medium text-slate-200">{label}</p>
-        <p className="text-[11px] text-slate-500 mt-0.5">{description}</p>
+        <p className="text-sm font-medium text-foreground">{label}</p>
+        <p className="text-[11px] text-muted mt-0.5">{description}</p>
       </div>
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
         disabled={disabled}
-        className="shrink-0 rounded-xl bg-slate-900/80 border border-white/[0.08] px-3 py-2 text-sm text-white
+        className="shrink-0 rounded-xl bg-background/80 border border-glass-border px-3 py-2 text-sm text-white
                    focus:outline-none focus:ring-2 focus:ring-accent/40 transition-all cursor-pointer
                    disabled:opacity-50 disabled:cursor-not-allowed
                    appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2212%22%20height%3D%228%22%20viewBox%3D%220%200%2012%208%22%20fill%3D%22none%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cpath%20d%3D%22M1%201.5L6%206.5L11%201.5%22%20stroke%3D%22%2394a3b8%22%20stroke-width%3D%221.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E')]
@@ -152,9 +152,9 @@ export default function PrivacyPage() {
   if (loading) {
     return (
       <div className="glass-card rounded-2xl p-8 animate-pulse space-y-3">
-        <div className="h-5 w-32 rounded bg-slate-800/40 mb-4" />
+        <div className="h-5 w-32 rounded bg-surface-hover/40 mb-4" />
         {Array.from({ length: 3 }).map((_, i) => (
-          <div key={i} className="h-20 w-full rounded-xl bg-slate-800/30" />
+          <div key={i} className="h-20 w-full rounded-xl bg-surface-hover/30" />
         ))}
       </div>
     );
@@ -163,7 +163,7 @@ export default function PrivacyPage() {
   return (
     <div className="glass-card rounded-2xl p-6">
       <h2 className="text-lg font-semibold text-white mb-1">Privacy</h2>
-      <p className="text-xs text-slate-500 mb-6">Control your visibility and who can interact with you.</p>
+      <p className="text-xs text-muted mb-6">Control your visibility and who can interact with you.</p>
 
       <div className="space-y-2.5">
         {PRIVACY_CONFIG.map((item) => (

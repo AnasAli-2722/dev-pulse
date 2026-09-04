@@ -242,12 +242,12 @@ export default function NewSnippetPage() {
   return (
     <div className="flex-1 pb-16">
       {/* ── Page header ── */}
-      <header className="relative overflow-hidden border-b border-white/[0.04] bg-gradient-to-b from-slate-900/50 to-transparent">
+      <header className="relative overflow-hidden border-b border-glass-border bg-gradient-to-b from-background/50 to-transparent">
         <div className="pointer-events-none absolute inset-0">
-          <div className="absolute left-1/2 top-0 -translate-x-1/2 h-[200px] w-[500px] rounded-full bg-indigo-500/[0.06] blur-[80px]" />
+          <div className="absolute left-1/2 top-0 -translate-x-1/2 h-[200px] w-[500px] rounded-full bg-accent/[0.06] blur-[80px]" />
         </div>
         <div className="relative mx-auto max-w-4xl px-6 py-10">
-          <div className="inline-flex items-center gap-2 rounded-full border border-indigo-500/20 bg-indigo-500/10 px-3 py-1 text-xs font-medium text-indigo-400 mb-4">
+          <div className="inline-flex items-center gap-2 rounded-full border border-accent/20 bg-accent/10 px-3 py-1 text-xs font-medium text-accent mb-4">
             <svg
               className="h-3.5 w-3.5"
               fill="none"
@@ -266,7 +266,7 @@ export default function NewSnippetPage() {
           <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
             Create a snippet
           </h1>
-          <p className="mt-2 text-sm text-slate-400">
+          <p className="mt-2 text-sm text-muted">
             Write your code, pick a language, and share it with the community.
           </p>
         </div>
@@ -291,7 +291,7 @@ export default function NewSnippetPage() {
           <div>
             <label
               htmlFor="snippet-title"
-              className="block text-xs font-medium text-slate-400 mb-1.5 uppercase tracking-wider"
+              className="block text-xs font-medium text-muted mb-1.5 uppercase tracking-wider"
             >
               Title
             </label>
@@ -302,7 +302,7 @@ export default function NewSnippetPage() {
               onChange={(e) => setTitle(e.target.value)}
               placeholder="e.g. React useDebounce Hook"
               maxLength={120}
-              className="input-field w-full rounded-xl border border-glass-border bg-slate-950/60 px-4 py-3.5 text-lg font-medium text-white placeholder:text-slate-600 outline-none"
+              className="input-field w-full rounded-xl border border-glass-border bg-background/60 px-4 py-3.5 text-lg font-medium text-white placeholder:text-muted outline-none"
             />
           </div>
 
@@ -311,10 +311,10 @@ export default function NewSnippetPage() {
             <div className="sm:col-span-2">
               <label
                 htmlFor="snippet-description"
-                className="block text-xs font-medium text-slate-400 mb-1.5 uppercase tracking-wider"
+                className="block text-xs font-medium text-muted mb-1.5 uppercase tracking-wider"
               >
                 Description
-                <span className="text-slate-600 ml-1 normal-case tracking-normal">
+                <span className="text-muted ml-1 normal-case tracking-normal">
                   (optional)
                 </span>
               </label>
@@ -325,14 +325,14 @@ export default function NewSnippetPage() {
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="A short description of what this snippet does"
                 maxLength={280}
-                className="input-field w-full rounded-xl border border-glass-border bg-slate-950/60 px-4 py-3 text-sm text-slate-200 placeholder:text-slate-600 outline-none"
+                className="input-field w-full rounded-xl border border-glass-border bg-background/60 px-4 py-3 text-sm text-foreground placeholder:text-muted outline-none"
               />
             </div>
 
             <div>
               <label
                 htmlFor="snippet-language"
-                className="block text-xs font-medium text-slate-400 mb-1.5 uppercase tracking-wider"
+                className="block text-xs font-medium text-muted mb-1.5 uppercase tracking-wider"
               >
                 Language
               </label>
@@ -341,7 +341,7 @@ export default function NewSnippetPage() {
                   id="snippet-language"
                   value={languageId ?? ""}
                   onChange={handleLanguageChange}
-                  className="input-field w-full appearance-none rounded-xl border border-glass-border bg-slate-950/60 px-4 py-3 pr-10 text-sm text-slate-200 outline-none cursor-pointer"
+                  className="input-field w-full appearance-none rounded-xl border border-glass-border bg-background/60 px-4 py-3 pr-10 text-sm text-foreground outline-none cursor-pointer"
                 >
                   {languages.length === 0 && (
                     <option value="" disabled>
@@ -352,7 +352,7 @@ export default function NewSnippetPage() {
                     <option
                       key={lang.id}
                       value={lang.id}
-                      className="bg-slate-900 text-slate-200"
+                      className="bg-background text-foreground"
                     >
                       {lang.name}
                     </option>
@@ -361,7 +361,7 @@ export default function NewSnippetPage() {
                 {/* Dropdown chevron */}
                 <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
                   <svg
-                    className="h-4 w-4 text-slate-500"
+                    className="h-4 w-4 text-muted"
                     fill="none"
                     viewBox="0 0 24 24"
                     strokeWidth={2}
@@ -381,10 +381,10 @@ export default function NewSnippetPage() {
           {/* ── Code editor ── */}
           <div>
             <div className="flex items-center justify-between mb-1.5">
-              <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider">
+              <label className="block text-xs font-medium text-muted uppercase tracking-wider">
                 Code
               </label>
-              <div className="flex items-center gap-3 text-[11px] text-slate-600 tabular-nums">
+              <div className="flex items-center gap-3 text-[11px] text-muted tabular-nums">
                 <span>{lineCount} lines</span>
                 <span>{charCount} chars</span>
               </div>
@@ -397,11 +397,11 @@ export default function NewSnippetPage() {
                           shadow-[inset_3px_3px_8px_rgba(0,0,0,0.55),inset_-2px_-2px_6px_rgba(255,255,255,0.025)]"
             >
               {/* Editor toolbar */}
-              <div className="flex items-center gap-1.5 border-b border-white/[0.04] bg-[#1e1e1e] px-4 py-2.5">
+              <div className="flex items-center gap-1.5 border-b border-glass-border bg-[#1e1e1e] px-4 py-2.5">
                 <div className="h-3 w-3 rounded-full bg-red-500/60" />
                 <div className="h-3 w-3 rounded-full bg-yellow-500/60" />
                 <div className="h-3 w-3 rounded-full bg-green-500/60" />
-                <span className="ml-3 text-[11px] text-slate-500 font-mono">
+                <span className="ml-3 text-[11px] text-muted font-mono">
                   {title.trim() || "untitled"}
                   {languages.find((l) => l.id === languageId)?.extension ??
                     ".js"}
@@ -438,7 +438,7 @@ export default function NewSnippetPage() {
                 }}
                 loading={
                   <div className="flex items-center justify-center h-[500px] bg-[#1e1e1e]">
-                    <div className="flex items-center gap-3 text-slate-500">
+                    <div className="flex items-center gap-3 text-muted">
                       <svg
                         className="animate-spin h-5 w-5"
                         fill="none"
@@ -471,14 +471,14 @@ export default function NewSnippetPage() {
             <div className="sm:col-span-2">
               <label
                 htmlFor="commit-msg"
-                className="block text-xs font-medium text-slate-400 mb-1.5 uppercase tracking-wider"
+                className="block text-xs font-medium text-muted mb-1.5 uppercase tracking-wider"
               >
                 Commit Message
               </label>
               <div className="relative">
                 <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
                   <svg
-                    className="h-4 w-4 text-slate-600"
+                    className="h-4 w-4 text-muted"
                     fill="none"
                     viewBox="0 0 24 24"
                     strokeWidth={1.5}
@@ -498,23 +498,23 @@ export default function NewSnippetPage() {
                   onChange={(e) => setCommitMsg(e.target.value)}
                   placeholder="Initial commit"
                   maxLength={200}
-                  className="input-field w-full rounded-xl border border-glass-border bg-slate-950/60 px-4 py-3 pl-11 text-sm text-slate-200 placeholder:text-slate-600 outline-none"
+                  className="input-field w-full rounded-xl border border-glass-border bg-background/60 px-4 py-3 pl-11 text-sm text-foreground placeholder:text-muted outline-none"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-400 mb-1.5 uppercase tracking-wider">
+              <label className="block text-xs font-medium text-muted mb-1.5 uppercase tracking-wider">
                 Visibility
               </label>
-              <div className="flex rounded-xl border border-glass-border bg-slate-950/60 overflow-hidden">
+              <div className="flex rounded-xl border border-glass-border bg-background/60 overflow-hidden">
                 <button
                   type="button"
                   onClick={() => setIsPublic(true)}
                   className={`flex-1 py-3 text-sm font-medium transition-all cursor-pointer ${
                     isPublic
                       ? "bg-accent/15 text-accent"
-                      : "text-slate-500 hover:text-slate-300"
+                      : "text-muted hover:text-foreground"
                   }`}
                 >
                   Public
@@ -525,7 +525,7 @@ export default function NewSnippetPage() {
                   className={`flex-1 py-3 text-sm font-medium transition-all border-l border-glass-border cursor-pointer ${
                     !isPublic
                       ? "bg-accent/15 text-accent"
-                      : "text-slate-500 hover:text-slate-300"
+                      : "text-muted hover:text-foreground"
                   }`}
                 >
                   Private
@@ -540,7 +540,7 @@ export default function NewSnippetPage() {
           <button
             type="button"
             onClick={() => router.back()}
-            className="text-sm text-slate-500 hover:text-slate-300 transition-colors cursor-pointer"
+            className="text-sm text-muted hover:text-foreground transition-colors cursor-pointer"
           >
             ← Cancel
           </button>
@@ -554,7 +554,7 @@ export default function NewSnippetPage() {
             id="publish-snippet-btn"
             className="inline-flex items-center gap-2 rounded-xl bg-accent hover:bg-accent-hover
                        px-6 py-3 text-sm font-semibold text-white transition-colors duration-200
-                       shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/30
+                       shadow-lg shadow-accent/20 hover:shadow-accent/30
                        disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
           >
             {isSubmitting || isPending ? (

@@ -128,12 +128,12 @@ function HeartbeatChart({ snippets }: { snippets: SnippetWithAuthor[] }) {
       <div className="flex items-center justify-between mb-2 relative z-10">
         <div className="flex items-center gap-2">
           <div className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-success opacity-75" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-success" />
           </div>
-          <h3 className="text-sm font-semibold text-slate-300">Dev Pulse</h3>
+          <h3 className="text-sm font-semibold text-foreground">Dev Pulse</h3>
         </div>
-        <span className="text-[10px] font-mono text-slate-500 tabular-nums">
+        <span className="text-[10px] font-mono text-muted tabular-nums">
           {totalActivity} events · 30d
         </span>
       </div>
@@ -233,8 +233,8 @@ function SocialLinks({ profile }: { profile: ProfileData }) {
             {...(isActive ? { href: link.url!, target: "_blank", rel: "noopener noreferrer" } : {})}
             className={`flex h-9 w-9 items-center justify-center rounded-xl transition-all duration-200
                         ${isActive
-                ? "bg-slate-800/60 text-slate-300 hover:bg-slate-700/60 hover:text-white ring-1 ring-white/[0.06] hover:ring-white/[0.12] cursor-pointer"
-                : "bg-slate-900/40 text-slate-600 ring-1 ring-white/[0.03] cursor-default"
+                ? "bg-surface-hover/60 text-foreground hover:bg-surface-hover/60 hover:text-white ring-1 ring-white/[0.06] hover:ring-white/[0.12] cursor-pointer"
+                : "bg-background/40 text-muted ring-1 ring-white/[0.03] cursor-default"
               }`}
             title={isActive ? link.label : `${link.label} (not set)`}
           >
@@ -347,8 +347,8 @@ export default function ProfileView({
     reputation >= 500
       ? "from-amber-400 via-yellow-300 to-amber-500"
       : reputation >= 100
-        ? "from-indigo-400 via-purple-400 to-indigo-500"
-        : "from-slate-500 via-slate-400 to-slate-500";
+        ? "from-accent via-accent-hover to-accent"
+        : "from-background via-surface to-background";
 
   // Top snippets by stars for overview
   const topSnippets = useMemo(
@@ -364,7 +364,7 @@ export default function ProfileView({
         {/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
         <aside className="lg:col-span-3 lg:sticky lg:top-20 lg:self-start">
           <div className="glass-card rounded-2xl p-6 flex flex-col items-center text-center relative overflow-hidden">
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-indigo-500/[0.04] to-transparent" />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-accent/[0.04] to-transparent" />
 
             {/* Avatar with glow ring */}
             <div className="relative mb-5">
@@ -379,10 +379,10 @@ export default function ProfileView({
                   <img
                     src={profile.avatar_url}
                     alt={profile.username}
-                    className="h-24 w-24 rounded-full object-cover ring-2 ring-slate-900 shadow-xl shadow-black/40"
+                    className="h-24 w-24 rounded-full object-cover ring-2 ring-glass-border shadow-xl shadow-black/40"
                   />
                 ) : (
-                  <div className="flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500/30 to-purple-500/30 ring-2 ring-slate-900 text-4xl font-bold text-indigo-300 shadow-xl shadow-black/40">
+                  <div className="flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-accent/30 to-accent-hover/30 ring-2 ring-glass-border text-4xl font-bold text-accent shadow-xl shadow-black/40">
                     {initials}
                   </div>
                 )}
@@ -394,7 +394,7 @@ export default function ProfileView({
               <h1 className="text-xl font-bold text-white leading-tight">
                 {profile.full_name || profile.username}
               </h1>
-              <p className="mt-1 text-sm text-slate-400 font-medium">@{profile.username}</p>
+              <p className="mt-1 text-sm text-muted font-medium">@{profile.username}</p>
               {isOwnProfile && (
                 <span className="mt-2 inline-block text-[10px] font-semibold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-accent/15 text-accent ring-1 ring-accent/30">
                   You
@@ -404,17 +404,17 @@ export default function ProfileView({
 
             {/* Bio */}
             {profile.bio ? (
-              <p className="relative z-10 mt-3 text-xs text-slate-400 leading-relaxed line-clamp-4 max-w-[220px]">
+              <p className="relative z-10 mt-3 text-xs text-muted leading-relaxed line-clamp-4 max-w-[220px]">
                 {profile.bio}
               </p>
             ) : (
-              <p className="relative z-10 mt-3 text-[11px] text-slate-600 italic">
+              <p className="relative z-10 mt-3 text-[11px] text-muted italic">
                 No bio yet
               </p>
             )}
 
             {/* Joined */}
-            <div className="relative z-10 mt-4 mb-4 flex items-center gap-1.5 text-[11px] text-slate-500">
+            <div className="relative z-10 mt-4 mb-4 flex items-center gap-1.5 text-[11px] text-muted">
               <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
               </svg>
@@ -425,23 +425,23 @@ export default function ProfileView({
             <div className="relative z-10 w-full mb-4">
               <div
                 className="flex items-center justify-around rounded-xl py-3 px-2
-                            bg-slate-950/50
+                            bg-background/50
                             shadow-[inset_1px_1px_4px_rgba(0,0,0,0.4),inset_-1px_-1px_3px_rgba(255,255,255,0.02)]
                             ring-1 ring-white/[0.04]"
               >
                 <div className="text-center px-2">
                   <p className="text-base font-bold text-white tabular-nums">{formatNumber(reputation)}</p>
-                  <p className="text-[9px] uppercase tracking-wider text-slate-500 font-medium">Rep</p>
+                  <p className="text-[9px] uppercase tracking-wider text-muted font-medium">Rep</p>
                 </div>
-                <div className="h-6 w-px bg-white/[0.06]" />
+                <div className="h-6 w-px bg-glass-bg" />
                 <div className="text-center px-2">
                   <p className="text-base font-bold text-white tabular-nums">{formatNumber(totalStars)}</p>
-                  <p className="text-[9px] uppercase tracking-wider text-slate-500 font-medium">Stars</p>
+                  <p className="text-[9px] uppercase tracking-wider text-muted font-medium">Stars</p>
                 </div>
-                <div className="h-6 w-px bg-white/[0.06]" />
+                <div className="h-6 w-px bg-glass-bg" />
                 <div className="text-center px-2">
                   <p className="text-base font-bold text-white tabular-nums">{formatNumber(snippets.length)}</p>
-                  <p className="text-[9px] uppercase tracking-wider text-slate-500 font-medium">Snippets</p>
+                  <p className="text-[9px] uppercase tracking-wider text-muted font-medium">Snippets</p>
                 </div>
               </div>
             </div>
@@ -452,21 +452,21 @@ export default function ProfileView({
                 onClick={() => setShowFollowModal("followers")}
                 className="flex flex-col items-center group cursor-pointer"
               >
-                <p className="text-[13px] font-bold text-slate-200 group-hover:text-white transition-colors">{formatNumber(followerCount)}</p>
-                <p className="text-[10px] text-slate-500 group-hover:text-slate-400 transition-colors">Followers</p>
+                <p className="text-[13px] font-bold text-foreground group-hover:text-white transition-colors">{formatNumber(followerCount)}</p>
+                <p className="text-[10px] text-muted group-hover:text-muted transition-colors">Followers</p>
               </button>
-              <div className="h-4 w-px bg-white/[0.06]" />
+              <div className="h-4 w-px bg-glass-bg" />
               <button
                 onClick={() => setShowFollowModal("following")}
                 className="flex flex-col items-center group cursor-pointer"
               >
-                <p className="text-[13px] font-bold text-slate-200 group-hover:text-white transition-colors">{formatNumber(followingCount)}</p>
-                <p className="text-[10px] text-slate-500 group-hover:text-slate-400 transition-colors">Following</p>
+                <p className="text-[13px] font-bold text-foreground group-hover:text-white transition-colors">{formatNumber(followingCount)}</p>
+                <p className="text-[10px] text-muted group-hover:text-muted transition-colors">Following</p>
               </button>
             </div>
 
             {/* Social Links */}
-            <div className="relative z-10 w-full mt-4 pt-4 border-t border-white/[0.06]">
+            <div className="relative z-10 w-full mt-4 pt-4 border-t border-glass-border">
               <SocialLinks profile={profile} />
             </div>
 
@@ -474,7 +474,7 @@ export default function ProfileView({
             {isOwnProfile ? (
               <Link
                 href="/settings"
-                className="relative z-10 mt-4 w-full inline-flex items-center justify-center gap-1.5 rounded-xl bg-surface hover:bg-surface-hover border border-glass-border px-4 py-2.5 text-xs font-medium text-slate-300 transition-colors"
+                className="relative z-10 mt-4 w-full inline-flex items-center justify-center gap-1.5 rounded-xl bg-surface hover:bg-surface-hover border border-glass-border px-4 py-2.5 text-xs font-medium text-foreground transition-colors"
               >
                 <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
@@ -487,7 +487,7 @@ export default function ProfileView({
                   onClick={toggleFollow}
                   className={`relative z-10 mt-4 w-full inline-flex items-center justify-center gap-1.5 rounded-xl border px-4 py-2.5 text-xs font-semibold transition-colors ${
                     isFollowing
-                      ? "bg-slate-800/50 border-slate-700 text-slate-300 hover:bg-slate-800 hover:text-white"
+                      ? "bg-surface-hover/50 border-glass-border text-foreground hover:bg-surface-hover hover:text-white"
                       : "bg-accent/15 border-accent/30 text-accent hover:bg-accent/25 hover:border-accent/50"
                   }`}
                 >
@@ -509,7 +509,7 @@ export default function ProfileView({
           <div className="sticky top-[3.5rem] z-30 -mx-1 px-1 pt-2 pb-1 bg-background/80 backdrop-blur-xl">
             <div
               className="relative flex rounded-xl p-1
-                          bg-slate-950/60
+                          bg-background/60
                           shadow-[inset_1px_1px_4px_rgba(0,0,0,0.5),inset_-1px_-1px_3px_rgba(255,255,255,0.02)]
                           ring-1 ring-white/[0.04]"
             >
@@ -518,7 +518,7 @@ export default function ProfileView({
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
                   className={`relative flex-1 rounded-lg px-4 py-2 text-xs font-semibold transition-colors z-10
-                              ${activeTab === tab.id ? "text-white" : "text-slate-500 hover:text-slate-300"}`}
+                              ${activeTab === tab.id ? "text-white" : "text-muted hover:text-foreground"}`}
                 >
                   {activeTab === tab.id && (
                     <motion.div
@@ -529,7 +529,7 @@ export default function ProfileView({
                   )}
                   <span className="relative z-10">{tab.label}</span>
                   {tab.id === "starred" && (
-                    <span className="relative z-10 ml-1.5 text-[10px] text-slate-500 tabular-nums">
+                    <span className="relative z-10 ml-1.5 text-[10px] text-muted tabular-nums">
                       {starredSnippets.length}
                     </span>
                   )}
@@ -555,7 +555,7 @@ export default function ProfileView({
                     <svg className="h-4 w-4 text-accent" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" />
                     </svg>
-                    <h3 className="text-sm font-semibold text-slate-300">Top Snippets</h3>
+                    <h3 className="text-sm font-semibold text-foreground">Top Snippets</h3>
                   </div>
 
                   {topSnippets.length > 0 ? (
@@ -581,9 +581,9 @@ export default function ProfileView({
                       <svg className="h-4 w-4 text-accent" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5" />
                       </svg>
-                      <h3 className="text-sm font-semibold text-slate-300">
+                      <h3 className="text-sm font-semibold text-foreground">
                         Snippet Desk
-                        <span className="ml-2 text-xs text-slate-500 font-normal tabular-nums">
+                        <span className="ml-2 text-xs text-muted font-normal tabular-nums">
                           {snippets.length}
                         </span>
                       </h3>
@@ -591,7 +591,7 @@ export default function ProfileView({
                     {isOwnProfile && (
                       <Link
                         href="/snippet/new"
-                        className="inline-flex items-center gap-1.5 rounded-xl bg-accent hover:bg-accent-hover px-3.5 py-2 text-xs font-semibold text-white transition-colors shadow-lg shadow-indigo-500/20"
+                        className="inline-flex items-center gap-1.5 rounded-xl bg-accent hover:bg-accent-hover px-3.5 py-2 text-xs font-semibold text-white transition-colors shadow-lg shadow-accent/20"
                       >
                         <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -623,9 +623,9 @@ export default function ProfileView({
                     <svg className="h-4 w-4 text-amber-400/70" viewBox="0 0 20 20" fill="currentColor">
                       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.957c.3.921-.755 1.688-1.54 1.118l-3.37-2.448a1 1 0 00-1.176 0l-3.37 2.448c-.784.57-1.838-.197-1.539-1.118l1.287-3.957a1 1 0 00-.364-1.118L2.063 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69l1.286-3.957z" />
                     </svg>
-                    <h3 className="text-sm font-semibold text-slate-300">
+                    <h3 className="text-sm font-semibold text-foreground">
                       Starred Snippets
-                      <span className="ml-2 text-xs text-slate-500 font-normal tabular-nums">
+                      <span className="ml-2 text-xs text-muted font-normal tabular-nums">
                         {starredSnippets.length}
                       </span>
                     </h3>
@@ -639,13 +639,13 @@ export default function ProfileView({
                     </div>
                   ) : (
                     <div className="glass-card rounded-2xl flex flex-col items-center justify-center py-16 text-center">
-                      <svg className="h-8 w-8 text-slate-600 mb-3" viewBox="0 0 20 20" fill="currentColor">
+                      <svg className="h-8 w-8 text-muted mb-3" viewBox="0 0 20 20" fill="currentColor">
                         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.957c.3.921-.755 1.688-1.54 1.118l-3.37-2.448a1 1 0 00-1.176 0l-3.37 2.448c-.784.57-1.838-.197-1.539-1.118l1.287-3.957a1 1 0 00-.364-1.118L2.063 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69l1.286-3.957z" />
                       </svg>
-                      <h3 className="text-sm font-medium text-slate-400">
+                      <h3 className="text-sm font-medium text-muted">
                         {isOwnProfile ? "You haven't starred any snippets yet" : "No starred snippets"}
                       </h3>
-                      <p className="mt-1 text-xs text-slate-600">
+                      <p className="mt-1 text-xs text-muted">
                         {isOwnProfile ? "Explore the feed and star snippets you like!" : "Check back later."}
                       </p>
                     </div>
@@ -732,7 +732,7 @@ function FollowModal({
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         onClick={onClose}
-        className="absolute inset-0 bg-slate-950/60 backdrop-blur-sm cursor-pointer"
+        className="absolute inset-0 bg-background/60 backdrop-blur-sm cursor-pointer"
       />
 
       {/* Modal Content */}
@@ -741,13 +741,13 @@ function FollowModal({
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 10 }}
         transition={{ type: "spring", damping: 25, stiffness: 300 }}
-        className="relative w-full max-w-sm rounded-2xl bg-slate-900 border border-white/10 p-5 shadow-2xl flex flex-col max-h-[80vh]"
+        className="relative w-full max-w-sm rounded-2xl bg-background border border-white/10 p-5 shadow-2xl flex flex-col max-h-[80vh]"
       >
         <div className="flex items-center justify-between mb-4 pb-3 border-b border-white/5">
           <h2 className="text-lg font-bold text-white capitalize">{type}</h2>
           <button
             onClick={onClose}
-            className="text-slate-500 hover:text-white transition-colors cursor-pointer p-1"
+            className="text-muted hover:text-white transition-colors cursor-pointer p-1"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -757,9 +757,9 @@ function FollowModal({
 
         <div className="flex-1 overflow-y-auto space-y-3 custom-scrollbar pr-2">
           {loading ? (
-            <div className="py-10 text-center text-slate-500 text-sm">Loading...</div>
+            <div className="py-10 text-center text-muted text-sm">Loading...</div>
           ) : users.length === 0 ? (
-            <div className="py-10 text-center text-slate-500 text-sm">No {type} yet.</div>
+            <div className="py-10 text-center text-muted text-sm">No {type} yet.</div>
           ) : (
             users.map((u) => (
               <div key={u.id} className="flex items-center justify-between group">
@@ -767,12 +767,12 @@ function FollowModal({
                   {u.avatar_url ? (
                     <img src={u.avatar_url} alt={u.username} className="w-10 h-10 rounded-full object-cover ring-1 ring-white/10" />
                   ) : (
-                    <div className="w-10 h-10 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold text-sm ring-1 ring-white/10">
+                    <div className="w-10 h-10 rounded-full bg-accent/20 text-accent flex items-center justify-center font-bold text-sm ring-1 ring-white/10">
                       {u.username.charAt(0).toUpperCase()}
                     </div>
                   )}
                   <div>
-                    <p className="text-sm font-semibold text-slate-200 group-hover:text-white transition-colors">
+                    <p className="text-sm font-semibold text-foreground group-hover:text-white transition-colors">
                       {u.username}
                     </p>
                   </div>
@@ -780,7 +780,7 @@ function FollowModal({
                 <Link
                   href={`/profile/${u.username}`}
                   onClick={onClose}
-                  className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-xs font-medium text-slate-300 hover:text-white transition-colors border border-white/5"
+                  className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-xs font-medium text-foreground hover:text-white transition-colors border border-white/5"
                 >
                   View
                 </Link>
@@ -802,18 +802,18 @@ function EmptyState({ message, isOwnProfile }: { message: string; isOwnProfile: 
     <div className="glass-card rounded-2xl flex flex-col items-center justify-center py-20 text-center">
       <div
         className="mb-5 flex h-16 w-16 items-center justify-center rounded-2xl
-                    bg-slate-800/60 ring-1 ring-white/[0.06]
+                    bg-surface-hover/60 ring-1 ring-white/[0.06]
                     shadow-[inset_2px_2px_6px_rgba(0,0,0,0.5),inset_-1px_-1px_4px_rgba(255,255,255,0.03)]"
       >
-        <svg className="h-7 w-7 text-slate-500" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+        <svg className="h-7 w-7 text-muted" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5" />
         </svg>
       </div>
-      <h3 className="text-sm font-medium text-slate-300 mb-1">{message}</h3>
+      <h3 className="text-sm font-medium text-foreground mb-1">{message}</h3>
       {isOwnProfile && (
         <Link
           href="/snippet/new"
-          className="mt-4 inline-flex items-center gap-2 rounded-xl bg-accent hover:bg-accent-hover px-5 py-2.5 text-sm font-semibold text-white transition-colors shadow-lg shadow-indigo-500/20"
+          className="mt-4 inline-flex items-center gap-2 rounded-xl bg-accent hover:bg-accent-hover px-5 py-2.5 text-sm font-semibold text-white transition-colors shadow-lg shadow-accent/20"
         >
           <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />

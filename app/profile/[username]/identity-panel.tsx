@@ -47,8 +47,8 @@ export default function IdentityPanel({
     reputation >= 500
       ? "from-amber-400 via-yellow-300 to-amber-500"
       : reputation >= 100
-        ? "from-indigo-400 via-purple-400 to-indigo-500"
-        : "from-slate-500 via-slate-400 to-slate-500";
+        ? "from-accent via-accent-hover to-accent"
+        : "from-background via-surface to-background";
 
   const credibilityStats = [
     {
@@ -79,7 +79,7 @@ export default function IdentityPanel({
           <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
         </svg>
       ),
-      gradient: "from-purple-500/[0.06]",
+      gradient: "from-accent-hover/[0.06]",
     },
   ];
 
@@ -87,7 +87,7 @@ export default function IdentityPanel({
     <aside className="lg:sticky lg:top-20 lg:self-start">
       <div className="glass-card rounded-2xl p-6 flex flex-col items-center text-center relative overflow-hidden">
         {/* Subtle ambient glow behind the panel */}
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-indigo-500/[0.04] to-transparent" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-accent/[0.04] to-transparent" />
 
         {/* ── Avatar with animated glow ring ── */}
         <div className="relative mb-5">
@@ -106,10 +106,10 @@ export default function IdentityPanel({
               <img
                 src={profile.avatar_url}
                 alt={profile.username}
-                className="h-24 w-24 rounded-full object-cover ring-2 ring-slate-900 shadow-xl shadow-black/40"
+                className="h-24 w-24 rounded-full object-cover ring-2 ring-glass-border shadow-xl shadow-black/40"
               />
             ) : (
-              <div className="flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500/30 to-purple-500/30 ring-2 ring-slate-900 text-4xl font-bold text-indigo-300 shadow-xl shadow-black/40">
+              <div className="flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-accent/30 to-accent-hover/30 ring-2 ring-glass-border text-4xl font-bold text-accent shadow-xl shadow-black/40">
                 {initials}
               </div>
             )}
@@ -121,7 +121,7 @@ export default function IdentityPanel({
           <h1 className="text-xl font-bold text-white leading-tight">
             {profile.full_name || profile.username}
           </h1>
-          <p className="mt-1 text-sm text-slate-400 font-medium">
+          <p className="mt-1 text-sm text-muted font-medium">
             @{profile.username}
           </p>
           {isOwnProfile && (
@@ -133,13 +133,13 @@ export default function IdentityPanel({
 
         {/* ── Bio ── */}
         {profile.bio && (
-          <p className="relative z-10 mt-3 text-xs text-slate-400 leading-relaxed line-clamp-3 max-w-[220px]">
+          <p className="relative z-10 mt-3 text-xs text-muted leading-relaxed line-clamp-3 max-w-[220px]">
             {profile.bio}
           </p>
         )}
 
         {/* ── Joined date ── */}
-        <div className="relative z-10 mt-4 mb-5 flex items-center gap-1.5 text-[11px] text-slate-500">
+        <div className="relative z-10 mt-4 mb-5 flex items-center gap-1.5 text-[11px] text-muted">
           <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
           </svg>
@@ -156,14 +156,14 @@ export default function IdentityPanel({
               key={stat.label}
               whileHover={{ scale: 1.02 }}
               className={`flex items-center justify-between rounded-xl px-4 py-3
-                          bg-slate-950/50
+                          bg-background/50
                           shadow-[inset_1px_1px_4px_rgba(0,0,0,0.4),inset_-1px_-1px_3px_rgba(255,255,255,0.02)]
                           ring-1 ring-white/[0.04]
                           transition-all duration-200 hover:ring-white/[0.08]`}
             >
               <div className="flex items-center gap-2.5">
                 {stat.icon}
-                <span className="text-xs font-medium text-slate-400">{stat.label}</span>
+                <span className="text-xs font-medium text-muted">{stat.label}</span>
               </div>
               <span className="text-sm font-bold text-white tabular-nums">
                 {formatNumber(stat.value)}
@@ -175,16 +175,16 @@ export default function IdentityPanel({
           <motion.div
             whileHover={{ scale: 1.02 }}
             className="flex items-center justify-between rounded-xl px-4 py-3
-                        bg-slate-950/50
+                        bg-background/50
                         shadow-[inset_1px_1px_4px_rgba(0,0,0,0.4),inset_-1px_-1px_3px_rgba(255,255,255,0.02)]
                         ring-1 ring-white/[0.04]
                         transition-all duration-200 hover:ring-white/[0.08]"
           >
             <div className="flex items-center gap-2.5">
-              <svg className="h-4 w-4 text-emerald-400/70" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+              <svg className="h-4 w-4 text-success/70" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5" />
               </svg>
-              <span className="text-xs font-medium text-slate-400">Snippets</span>
+              <span className="text-xs font-medium text-muted">Snippets</span>
             </div>
             <span className="text-sm font-bold text-white tabular-nums">
               {formatNumber(totalSnippets)}
@@ -196,7 +196,7 @@ export default function IdentityPanel({
         {isOwnProfile && (
           <Link
             href="/profile/edit"
-            className="relative z-10 mt-5 w-full inline-flex items-center justify-center gap-1.5 rounded-xl bg-surface hover:bg-surface-hover border border-glass-border px-4 py-2.5 text-xs font-medium text-slate-300 transition-colors"
+            className="relative z-10 mt-5 w-full inline-flex items-center justify-center gap-1.5 rounded-xl bg-surface hover:bg-surface-hover border border-glass-border px-4 py-2.5 text-xs font-medium text-foreground transition-colors"
           >
             <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />

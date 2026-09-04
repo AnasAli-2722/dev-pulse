@@ -60,7 +60,7 @@ export default async function SettingsLayout({
   return (
     <div className="flex-1 pb-16">
       <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-        <div className="absolute left-1/4 top-0 h-[400px] w-[500px] rounded-full bg-indigo-500/[0.04] blur-[120px]" />
+        <div className="absolute left-1/4 top-0 h-[400px] w-[500px] rounded-full bg-accent/[0.04] blur-[120px]" />
       </div>
 
       <div className="relative z-10 mx-auto max-w-4xl px-6 pt-10">
@@ -74,7 +74,7 @@ export default async function SettingsLayout({
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="flex items-center gap-2.5 rounded-xl px-3.5 py-2.5 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/[0.04] transition-colors"
+                  className="flex items-center gap-2.5 rounded-xl px-3.5 py-2.5 text-sm font-medium text-muted hover:text-white hover:bg-glass-bg transition-colors"
                 >
                   {ICONS[item.icon]}
                   {item.label}

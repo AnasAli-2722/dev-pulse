@@ -124,25 +124,25 @@ export default function OnboardingPage() {
           <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-accent/50 to-transparent" />
 
           <div className="mb-8 text-center">
-            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500/20 to-purple-500/20 ring-1 ring-white/10 shadow-[inset_2px_2px_6px_rgba(0,0,0,0.5)]">
-              <svg className="h-7 w-7 text-indigo-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-accent/20 to-accent-hover/20 ring-1 ring-white/10 shadow-[inset_2px_2px_6px_rgba(0,0,0,0.5)]">
+              <svg className="h-7 w-7 text-accent" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
               </svg>
             </div>
             <h1 className="text-2xl font-bold tracking-tight text-white mb-2">Claim your username</h1>
-            <p className="text-sm text-slate-400 leading-relaxed">
+            <p className="text-sm text-muted leading-relaxed">
               Welcome to Dev Pulse! Choose a unique username for your developer profile.
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label htmlFor="username" className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+              <label htmlFor="username" className="block text-xs font-semibold uppercase tracking-wider text-muted mb-2">
                 Username
               </label>
               <div className="relative group">
                 <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
-                  <span className="text-slate-500 font-mono">@</span>
+                  <span className="text-muted font-mono">@</span>
                 </div>
                 <input
                   id="username"
@@ -153,11 +153,11 @@ export default function OnboardingPage() {
                   autoComplete="off"
                   autoFocus
                   spellCheck="false"
-                  className={`input-field w-full rounded-xl border bg-slate-950/60 px-4 py-3.5 pl-9 text-sm text-white placeholder:text-slate-600 transition-all focus:outline-none focus:ring-2
+                  className={`input-field w-full rounded-xl border bg-background/60 px-4 py-3.5 pl-9 text-sm text-white placeholder:text-muted transition-all focus:outline-none focus:ring-2
                     ${status === "invalid" || status === "taken" 
                       ? "border-red-500/30 focus:border-red-500 focus:ring-red-500/20" 
                       : status === "available"
-                        ? "border-emerald-500/30 focus:border-emerald-500 focus:ring-emerald-500/20"
+                        ? "border-success/30 focus:border-success focus:ring-success/20"
                         : "border-glass-border focus:border-accent focus:ring-accent/20"
                     }
                   `}
@@ -166,13 +166,13 @@ export default function OnboardingPage() {
                 {/* Status Indicator Icon */}
                 <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4">
                   {status === "checking" && (
-                    <svg className="animate-spin h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24">
+                    <svg className="animate-spin h-5 w-5 text-muted" fill="none" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                     </svg>
                   )}
                   {status === "available" && (
-                    <motion.svg initial={{ scale: 0 }} animate={{ scale: 1 }} className="h-5 w-5 text-emerald-400" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                    <motion.svg initial={{ scale: 0 }} animate={{ scale: 1 }} className="h-5 w-5 text-success" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
                     </motion.svg>
                   )}
@@ -192,12 +192,12 @@ export default function OnboardingPage() {
                   </motion.p>
                 )}
                 {status === "available" && (
-                  <motion.p initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} className="text-xs font-medium text-emerald-400/90">
+                  <motion.p initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} className="text-xs font-medium text-success/90">
                     Username is available!
                   </motion.p>
                 )}
                 {status === "idle" && (
-                  <p className="text-[11px] text-slate-500">
+                  <p className="text-[11px] text-muted">
                     3-15 chars, alphanumeric & underscores only.
                   </p>
                 )}
@@ -210,8 +210,8 @@ export default function OnboardingPage() {
               disabled={status !== "available" || isSubmitting}
               className={`relative w-full rounded-xl py-3.5 px-4 text-sm font-semibold text-white shadow-lg transition-all duration-200 cursor-pointer overflow-hidden
                 ${status === "available" 
-                  ? "bg-accent hover:bg-accent-hover shadow-indigo-500/25 hover:shadow-indigo-500/40" 
-                  : "bg-slate-800 text-slate-500 cursor-not-allowed border border-white/[0.04]"
+                  ? "bg-accent hover:bg-accent-hover shadow-accent/25 hover:shadow-accent/40" 
+                  : "bg-surface-hover text-muted cursor-not-allowed border border-glass-border"
                 }
               `}
             >

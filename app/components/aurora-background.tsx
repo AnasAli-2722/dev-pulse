@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 
 export default function AuroraBackground() {
   return (
-    <div className="fixed inset-0 -z-50 overflow-hidden bg-slate-950 pointer-events-none">
+    <div className="fixed inset-0 -z-50 overflow-hidden bg-background pointer-events-none">
       <motion.div
         animate={{
           x: ["0%", "20%", "-20%", "0%"],
@@ -32,7 +32,7 @@ export default function AuroraBackground() {
           duration: 20,
           ease: "linear",
         }}
-        className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] rounded-full bg-purple-600 opacity-20 blur-[150px] will-change-transform"
+        className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] rounded-full bg-accent-hover opacity-20 blur-[150px] will-change-transform"
       />
 
       <motion.div
@@ -47,7 +47,7 @@ export default function AuroraBackground() {
           duration: 18,
           ease: "linear",
         }}
-        className="absolute top-[30%] left-[40%] w-[400px] h-[400px] rounded-full bg-indigo-500 opacity-15 blur-[120px] will-change-transform"
+        className="absolute top-[30%] left-[40%] w-[400px] h-[400px] rounded-full bg-accent opacity-15 blur-[120px] will-change-transform"
       />
     </div>
   );

@@ -142,8 +142,8 @@ export default async function ProfilePage({ params }: PageProps) {
     <div className="flex-1 pb-16">
       {/* Ambient glow */}
       <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-        <div className="absolute left-1/4 top-0 h-[400px] w-[500px] rounded-full bg-indigo-500/[0.04] blur-[120px]" />
-        <div className="absolute right-1/4 top-20 h-[300px] w-[400px] rounded-full bg-purple-500/[0.03] blur-[100px]" />
+        <div className="absolute left-1/4 top-0 h-[400px] w-[500px] rounded-full bg-accent/[0.04] blur-[120px]" />
+        <div className="absolute right-1/4 top-20 h-[300px] w-[400px] rounded-full bg-accent-hover/[0.03] blur-[100px]" />
       </div>
 
       <ProfileView

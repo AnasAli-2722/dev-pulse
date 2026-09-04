@@ -98,7 +98,7 @@ export default function HomeFilters({
       <form onSubmit={handleSearch} className="relative">
         <div
           className="relative rounded-2xl
-                      bg-slate-950/70
+                      bg-background/70
                       shadow-[inset_3px_3px_8px_rgba(0,0,0,0.55),inset_-2px_-2px_6px_rgba(255,255,255,0.025)]
                       ring-1 ring-white/[0.04]"
         >
@@ -106,7 +106,7 @@ export default function HomeFilters({
           <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
             <svg
               className={`h-4.5 w-4.5 transition-colors ${
-                isPending ? "text-accent" : "text-slate-500"
+                isPending ? "text-accent" : "text-muted"
               }`}
               fill="none"
               viewBox="0 0 24 24"
@@ -127,7 +127,7 @@ export default function HomeFilters({
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
             placeholder="Search snippets by title, description, or author…"
-            className="w-full bg-transparent py-3.5 pl-11 pr-4 text-sm text-slate-200 placeholder:text-slate-600 outline-none"
+            className="w-full bg-transparent py-3.5 pl-11 pr-4 text-sm text-foreground placeholder:text-muted outline-none"
           />
 
           {/* Clear button */}
@@ -138,7 +138,7 @@ export default function HomeFilters({
                 setSearchValue("");
                 updateParams({ q: "" });
               }}
-              className="absolute inset-y-0 right-12 flex items-center px-2 text-slate-600 hover:text-slate-400 transition-colors cursor-pointer"
+              className="absolute inset-y-0 right-12 flex items-center px-2 text-muted hover:text-muted transition-colors cursor-pointer"
             >
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
@@ -149,7 +149,7 @@ export default function HomeFilters({
           {/* Submit button */}
           <button
             type="submit"
-            className="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-500 hover:text-accent transition-colors cursor-pointer"
+            className="absolute inset-y-0 right-0 flex items-center pr-4 text-muted hover:text-accent transition-colors cursor-pointer"
           >
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
@@ -179,7 +179,7 @@ export default function HomeFilters({
                           ${
                             isActive
                               ? "bg-accent/15 text-accent ring-1 ring-accent/30 shadow-sm shadow-accent/10"
-                              : "bg-slate-800/50 text-slate-400 ring-1 ring-white/[0.06] hover:bg-slate-800 hover:text-slate-300"
+                              : "bg-surface-hover/50 text-muted ring-1 ring-white/[0.06] hover:bg-surface-hover hover:text-foreground"
                           }`}
             >
               {opt.icon}
@@ -189,7 +189,7 @@ export default function HomeFilters({
         })}
 
         {/* Divider */}
-        <div className="mx-1 h-5 w-px bg-white/[0.06]" />
+        <div className="mx-1 h-5 w-px bg-glass-bg" />
 
         {/* Language pills */}
         {LANG_FILTERS.map((opt) => {
@@ -203,7 +203,7 @@ export default function HomeFilters({
                           ${
                             isActive
                               ? "bg-accent/15 text-accent ring-1 ring-accent/30 shadow-sm shadow-accent/10"
-                              : "bg-slate-800/50 text-slate-400 ring-1 ring-white/[0.06] hover:bg-slate-800 hover:text-slate-300"
+                              : "bg-surface-hover/50 text-muted ring-1 ring-white/[0.06] hover:bg-surface-hover hover:text-foreground"
                           }`}
             >
               {opt.label}

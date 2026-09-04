@@ -109,7 +109,7 @@ export default function SettingsProfilePage() {
       <button
         onClick={handleSave}
         disabled={saving}
-        className="w-full rounded-xl bg-accent hover:bg-accent-hover disabled:opacity-50 px-4 py-2.5 text-xs md:text-sm font-semibold text-white transition-colors shadow-lg shadow-indigo-500/20"
+        className="w-full rounded-xl bg-accent hover:bg-accent-hover disabled:opacity-50 px-4 py-2.5 text-xs md:text-sm font-semibold text-white transition-colors shadow-lg shadow-accent/20"
       >
         {saving ? "Saving..." : "Save Changes"}
       </button>

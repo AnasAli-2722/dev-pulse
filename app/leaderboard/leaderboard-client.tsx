@@ -28,7 +28,7 @@ function formatNumber(n: number): string {
 
 function getTierGlow(rank: number) {
   if (rank === 1) return "ring-amber-400/40 shadow-amber-400/20";
-  if (rank === 2) return "ring-slate-300/30 shadow-slate-300/15";
+  if (rank === 2) return "ring-glass-border shadow-glass-border";
   if (rank === 3) return "ring-amber-600/30 shadow-amber-700/15";
   if (rank <= 10) return "ring-purple-500/20 shadow-purple-500/10";
   return "ring-white/[0.06] shadow-black/20";
@@ -36,16 +36,16 @@ function getTierGlow(rank: number) {
 
 function getTierDot(rank: number) {
   if (rank <= 3) return "bg-amber-400";
-  if (rank <= 10) return "bg-purple-400";
+  if (rank <= 10) return "bg-accent-hover";
   if (rank <= 25) return "bg-blue-400";
-  return "bg-slate-500";
+  return "bg-surface-hover";
 }
 
 function getRankLabel(rank: number) {
   if (rank <= 3) return "text-amber-400";
   if (rank <= 10) return "text-purple-400";
   if (rank <= 25) return "text-blue-400";
-  return "text-slate-500";
+  return "text-muted";
 }
 
 /* ------------------------------------------------------------------ */
@@ -72,10 +72,10 @@ const podiumMeta: Record<number, {
   },
   2: {
     label: "2nd",
-    gradient: "from-slate-300/10 via-slate-400/5 to-transparent",
-    ringColor: "ring-slate-300/30",
+    gradient: "from-background/10 via-surface/5 to-transparent",
+    ringColor: "ring-glass-border",
     glow: "shadow-[0_0_30px_rgba(148,163,184,0.1)]",
-    iconColor: "text-slate-300",
+    iconColor: "text-foreground",
     scale: "",
     order: "order-1 lg:order-1",
   },
@@ -112,7 +112,7 @@ function PodiumCard({ entry }: { entry: LeaderboardEntry }) {
 
           {/* Rank badge */}
           <div className={`relative z-10 mb-2 md:mb-4 flex h-6 w-6 md:h-8 md:w-8 items-center justify-center rounded-full
-                           bg-slate-900/80 ring-2 ${meta.ringColor} text-[9px] md:text-sm font-bold ${meta.iconColor}`}>
+                           bg-background/80 ring-2 ${meta.ringColor} text-[9px] md:text-sm font-bold ${meta.iconColor}`}>
             {entry.rank}
           </div>
 
@@ -123,7 +123,7 @@ function PodiumCard({ entry }: { entry: LeaderboardEntry }) {
                 entry.rank === 1
                   ? "bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500"
                   : entry.rank === 2
-                    ? "bg-gradient-to-r from-slate-300 via-slate-200 to-slate-300"
+                    ? "bg-gradient-to-r from-background via-surface to-background"
                     : "bg-gradient-to-r from-amber-600 via-amber-500 to-amber-700"
               }`}
               animate={{ rotate: 360 }}
@@ -134,13 +134,13 @@ function PodiumCard({ entry }: { entry: LeaderboardEntry }) {
                 <img
                   src={entry.avatar_url}
                   alt={entry.username}
-                  className={`h-8 w-8 md:h-24 md:w-24 rounded-full object-cover ring-2 ring-slate-900 shadow-xl shadow-black/40
+                  className={`h-8 w-8 md:h-24 md:w-24 rounded-full object-cover ring-2 ring-glass-border shadow-xl shadow-black/40
                               ${entry.rank === 1 ? "h-10 w-10 md:h-28 md:w-28" : ""}`}
                 />
               ) : (
                 <div
                   className={`flex items-center justify-center rounded-full bg-gradient-to-br
-                              from-indigo-500/30 to-purple-500/30 ring-2 ring-slate-900 font-bold text-indigo-300
+                              from-accent/30 to-accent-hover/30 ring-2 ring-glass-border font-bold text-accent
                               shadow-xl shadow-black/40
                               ${entry.rank === 1 ? "h-10 w-10 text-sm md:h-28 md:w-28 md:text-4xl" : "h-8 w-8 text-xs md:h-24 md:w-24 md:text-3xl"}`}
                 >
@@ -155,7 +155,7 @@ function PodiumCard({ entry }: { entry: LeaderboardEntry }) {
             <h3 className="text-[10px] md:text-lg font-bold text-white truncate w-full leading-tight mx-auto">
               {entry.full_name || entry.username}
             </h3>
-            <p className="text-xs text-slate-400 font-medium mt-0.5 hidden md:block">@{entry.username}</p>
+            <p className="text-xs text-muted font-medium mt-0.5 hidden md:block">@{entry.username}</p>
           </div>
 
           {/* Stats */}
@@ -164,14 +164,14 @@ function PodiumCard({ entry }: { entry: LeaderboardEntry }) {
               <p className="text-[10px] md:text-lg font-extrabold text-white tabular-nums">
                 {formatNumber(entry.reputation)}
               </p>
-              <p className="text-[8px] md:text-xs uppercase tracking-wider text-slate-500 font-medium leading-none mt-0.5 md:mt-0">Rep</p>
+              <p className="text-[8px] md:text-xs uppercase tracking-wider text-muted font-medium leading-none mt-0.5 md:mt-0">Rep</p>
             </div>
             <div className="h-3 md:h-6 w-px bg-white/10" />
             <div className="text-center">
               <p className="text-[10px] md:text-lg font-extrabold text-white tabular-nums">
                 {formatNumber(entry.total_stars)}
               </p>
-              <p className="text-[8px] md:text-xs uppercase tracking-wider text-slate-500 font-medium leading-none mt-0.5 md:mt-0">Stars</p>
+              <p className="text-[8px] md:text-xs uppercase tracking-wider text-muted font-medium leading-none mt-0.5 md:mt-0">Stars</p>
             </div>
           </div>
         </div>
@@ -200,15 +200,15 @@ function RankedRow({ entry, index }: { entry: LeaderboardEntry; index: number })
       <Link href={`/profile/${entry.username}`}>
         <div
           className={`flex items-center gap-4 rounded-xl px-5 py-3.5
-                      bg-slate-950/50 backdrop-blur-sm
+                      bg-background/50 backdrop-blur-sm
                       shadow-[inset_1px_1px_4px_rgba(0,0,0,0.4),inset_-1px_-1px_3px_rgba(255,255,255,0.02)]
                       ring-1 ${tierGlow}
-                      transition-all duration-200 hover:ring-white/[0.12] hover:bg-slate-900/50
+                      transition-all duration-200 hover:ring-white/[0.12] hover:bg-background/50
                       cursor-pointer group`}
         >
           {/* Rank */}
           <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg
-                           bg-slate-900/60 text-sm font-bold tabular-nums ${rankColor}`}>
+                           bg-background/60 text-sm font-bold tabular-nums ${rankColor}`}>
             {entry.rank}
           </div>
 
@@ -223,17 +223,17 @@ function RankedRow({ entry, index }: { entry: LeaderboardEntry; index: number })
               className="h-9 w-9 shrink-0 rounded-full object-cover ring-1 ring-white/10"
             />
           ) : (
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-indigo-500/20 text-sm font-bold text-indigo-400 ring-1 ring-indigo-500/20">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent/20 text-sm font-bold text-accent ring-1 ring-accent/20">
               {initials}
             </div>
           )}
 
           {/* Name */}
           <div className="flex-1 min-w-0">
-            <p className="text-xs md:text-base font-semibold text-slate-200 truncate group-hover:text-white transition-colors">
+            <p className="text-xs md:text-base font-semibold text-foreground truncate group-hover:text-white transition-colors">
               {entry.full_name || entry.username}
             </p>
-            <p className="text-[10px] md:text-sm text-slate-500 font-medium truncate">@{entry.username}</p>
+            <p className="text-[10px] md:text-sm text-muted font-medium truncate">@{entry.username}</p>
           </div>
 
           {/* Stars */}
@@ -241,7 +241,7 @@ function RankedRow({ entry, index }: { entry: LeaderboardEntry; index: number })
             <svg className="h-3.5 w-3.5 text-amber-400/60" viewBox="0 0 20 20" fill="currentColor">
               <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.957c.3.921-.755 1.688-1.54 1.118l-3.37-2.448a1 1 0 00-1.176 0l-3.37 2.448c-.784.57-1.838-.197-1.539-1.118l1.287-3.957a1 1 0 00-.364-1.118L2.063 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69l1.286-3.957z" />
             </svg>
-            <span className="text-xs text-slate-400 tabular-nums font-medium">
+            <span className="text-xs text-muted tabular-nums font-medium">
               {formatNumber(entry.total_stars)}
             </span>
           </div>
@@ -251,7 +251,7 @@ function RankedRow({ entry, index }: { entry: LeaderboardEntry; index: number })
             <p className="text-sm font-bold text-white tabular-nums">
               {formatNumber(entry.reputation)}
             </p>
-            <p className="text-[9px] uppercase tracking-wider text-slate-600 font-medium">REP</p>
+            <p className="text-[9px] uppercase tracking-wider text-muted font-medium">REP</p>
           </div>
         </div>
       </Link>
@@ -289,7 +289,7 @@ export default function LeaderboardClient({ entries }: LeaderboardClientProps) {
         <section>
           <div className="flex items-center gap-3 mb-6">
             <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-            <span className="text-[11px] font-semibold uppercase tracking-widest text-slate-500">
+            <span className="text-[11px] font-semibold uppercase tracking-widest text-muted">
               Ranked Ladder
             </span>
             <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
@@ -306,13 +306,13 @@ export default function LeaderboardClient({ entries }: LeaderboardClientProps) {
       {/* ── Empty State ── */}
       {entries.length === 0 && (
         <div className="glass-card rounded-2xl flex flex-col items-center justify-center py-24 text-center">
-          <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-800/60 ring-1 ring-white/[0.06] shadow-[inset_2px_2px_6px_rgba(0,0,0,0.5)]">
-            <svg className="h-7 w-7 text-slate-500" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+          <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-surface-hover/60 ring-1 ring-white/[0.06] shadow-[inset_2px_2px_6px_rgba(0,0,0,0.5)]">
+            <svg className="h-7 w-7 text-muted" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 0 1 3 3h-15a3 3 0 0 1 3-3m9 0v-4.5A3.375 3.375 0 0 0 13.125 10.875h-2.25A3.375 3.375 0 0 0 7.5 14.25v4.5m9-9V6a3 3 0 0 0-3-3H10.5a3 3 0 0 0-3 3v3.75" />
             </svg>
           </div>
-          <h3 className="text-sm font-medium text-slate-300">No developers ranked yet</h3>
-          <p className="mt-1 text-xs text-slate-500">Be the first to climb the leaderboard!</p>
+          <h3 className="text-sm font-medium text-foreground">No developers ranked yet</h3>
+          <p className="mt-1 text-xs text-muted">Be the first to climb the leaderboard!</p>
         </div>
       )}
     </div>

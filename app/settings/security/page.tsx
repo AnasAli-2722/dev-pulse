@@ -18,7 +18,7 @@ function Alert({
   onDismiss?: () => void;
 }) {
   const styles = {
-    success: "bg-emerald-500/10 text-emerald-400 ring-emerald-500/20",
+    success: "bg-success/10 text-success ring-success/20",
     error: "bg-red-500/10 text-red-400 ring-red-500/20",
     info: "bg-blue-500/10 text-blue-400 ring-blue-500/20",
   };
@@ -71,16 +71,16 @@ function DeleteModal({
           </div>
           <div>
             <h3 className="text-base font-semibold text-white">Delete Account</h3>
-            <p className="text-xs text-slate-500">This action is permanent and irreversible</p>
+            <p className="text-xs text-muted">This action is permanent and irreversible</p>
           </div>
         </div>
 
-        <p className="text-sm text-slate-400 mb-4">
+        <p className="text-sm text-muted mb-4">
           All your data — snippets, stars, and profile — will be permanently deleted. This cannot be undone.
         </p>
 
         <div className="mb-4">
-          <label className="block text-xs font-medium text-slate-400 mb-1.5">
+          <label className="block text-xs font-medium text-muted mb-1.5">
             Type <span className="text-red-400 font-mono">DELETE</span> to confirm
           </label>
           <input
@@ -88,14 +88,14 @@ function DeleteModal({
             value={confirmText}
             onChange={(e) => setConfirmText(e.target.value)}
             placeholder="DELETE"
-            className="w-full rounded-xl bg-slate-950/50 border border-red-500/20 px-4 py-2.5 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-red-500/40 transition-all font-mono"
+            className="w-full rounded-xl bg-background/50 border border-red-500/20 px-4 py-2.5 text-sm text-white placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-red-500/40 transition-all font-mono"
           />
         </div>
 
         <div className="flex gap-3">
           <button
             onClick={onClose}
-            className="flex-1 rounded-xl bg-slate-800/60 hover:bg-slate-700/60 px-4 py-2.5 text-sm font-medium text-slate-300 transition-colors ring-1 ring-white/[0.06]"
+            className="flex-1 rounded-xl bg-surface-hover/60 hover:bg-surface-hover/60 px-4 py-2.5 text-sm font-medium text-foreground transition-colors ring-1 ring-white/[0.06]"
           >
             Cancel
           </button>
@@ -210,7 +210,7 @@ export default function SecurityPage() {
       {/* ━━━ Email Change ━━━ */}
       <div className="glass-card rounded-2xl p-6">
         <h2 className="text-lg font-semibold text-white mb-1">Email Address</h2>
-        <p className="text-xs text-slate-500 mb-5">Update your email. You'll need to confirm on both addresses.</p>
+        <p className="text-xs text-muted mb-5">Update your email. You'll need to confirm on both addresses.</p>
 
         {emailMsg && <div className="mb-4"><Alert type={emailMsg.type} text={emailMsg.text} onDismiss={() => setEmailMsg(null)} /></div>}
 
@@ -220,12 +220,12 @@ export default function SecurityPage() {
             value={newEmail}
             onChange={(e) => setNewEmail(e.target.value)}
             placeholder="new-email@example.com"
-            className="flex-1 rounded-xl bg-slate-950/50 border border-white/[0.06] px-4 py-2.5 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-accent/40 transition-all"
+            className="flex-1 rounded-xl bg-background/50 border border-glass-border px-4 py-2.5 text-sm text-white placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-accent/40 transition-all"
           />
           <button
             onClick={handleEmailChange}
             disabled={emailSaving || !newEmail.trim()}
-            className="shrink-0 rounded-xl bg-accent hover:bg-accent-hover disabled:opacity-50 px-5 py-2.5 text-sm font-semibold text-white transition-colors shadow-lg shadow-indigo-500/20"
+            className="shrink-0 rounded-xl bg-accent hover:bg-accent-hover disabled:opacity-50 px-5 py-2.5 text-sm font-semibold text-white transition-colors shadow-lg shadow-accent/20"
           >
             {emailSaving ? "Sending..." : "Update Email"}
           </button>
@@ -235,40 +235,40 @@ export default function SecurityPage() {
       {/* ━━━ Password Change ━━━ */}
       <div className="glass-card rounded-2xl p-6">
         <h2 className="text-lg font-semibold text-white mb-1">Password</h2>
-        <p className="text-xs text-slate-500 mb-5">Set a new password. Must be at least 8 characters.</p>
+        <p className="text-xs text-muted mb-5">Set a new password. Must be at least 8 characters.</p>
 
         {pwMsg && <div className="mb-4"><Alert type={pwMsg.type} text={pwMsg.text} onDismiss={() => setPwMsg(null)} /></div>}
 
         <div className="space-y-3">
           <div>
-            <label className="block text-xs font-medium text-slate-400 mb-1.5">New Password</label>
+            <label className="block text-xs font-medium text-muted mb-1.5">New Password</label>
             <input
               type="password"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
               placeholder="••••••••"
-              className="w-full rounded-xl bg-slate-950/50 border border-white/[0.06] px-4 py-2.5 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-accent/40 transition-all"
+              className="w-full rounded-xl bg-background/50 border border-glass-border px-4 py-2.5 text-sm text-white placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-accent/40 transition-all"
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-slate-400 mb-1.5">Confirm Password</label>
+            <label className="block text-xs font-medium text-muted mb-1.5">Confirm Password</label>
             <input
               type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="••••••••"
-              className="w-full rounded-xl bg-slate-950/50 border border-white/[0.06] px-4 py-2.5 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-accent/40 transition-all"
+              className="w-full rounded-xl bg-background/50 border border-glass-border px-4 py-2.5 text-sm text-white placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-accent/40 transition-all"
             />
           </div>
 
           {/* Strength indicator */}
           {newPassword && (
             <div className="flex items-center gap-2">
-              <div className="flex-1 h-1 rounded-full bg-slate-800 overflow-hidden">
+              <div className="flex-1 h-1 rounded-full bg-surface-hover overflow-hidden">
                 <div
                   className={`h-full rounded-full transition-all duration-300 ${
                     newPassword.length >= 12
-                      ? "w-full bg-emerald-400"
+                      ? "w-full bg-success"
                       : newPassword.length >= 8
                         ? "w-2/3 bg-amber-400"
                         : "w-1/3 bg-red-400"
@@ -277,7 +277,7 @@ export default function SecurityPage() {
               </div>
               <span className={`text-[10px] font-medium ${
                 newPassword.length >= 12
-                  ? "text-emerald-400"
+                  ? "text-success"
                   : newPassword.length >= 8
                     ? "text-amber-400"
                     : "text-red-400"
@@ -290,7 +290,7 @@ export default function SecurityPage() {
           <button
             onClick={handlePasswordChange}
             disabled={pwSaving || newPassword.length < 8}
-            className="w-full rounded-xl bg-accent hover:bg-accent-hover disabled:opacity-50 px-4 py-2.5 text-sm font-semibold text-white transition-colors shadow-lg shadow-indigo-500/20"
+            className="w-full rounded-xl bg-accent hover:bg-accent-hover disabled:opacity-50 px-4 py-2.5 text-sm font-semibold text-white transition-colors shadow-lg shadow-accent/20"
           >
             {pwSaving ? "Updating..." : "Update Password"}
           </button>
@@ -305,7 +305,7 @@ export default function SecurityPage() {
           </svg>
           <h2 className="text-lg font-semibold text-red-400">Danger Zone</h2>
         </div>
-        <p className="text-xs text-slate-500 mb-5">
+        <p className="text-xs text-muted mb-5">
           Permanently delete your account and all associated data. This action cannot be reversed.
         </p>
 

@@ -137,9 +137,9 @@ export default function CommentSection({ snippetId }: { snippetId: number }) {
 
   return (
     <div className="mt-12 w-full max-w-4xl mx-auto space-y-8">
-      <div className="flex items-center justify-between border-b border-white/[0.06] pb-4">
-        <h3 className="text-lg font-bold text-slate-200">Discussion</h3>
-        <span className="text-xs font-semibold text-slate-500 bg-slate-800/50 px-2.5 py-1 rounded-full border border-white/[0.04]">
+      <div className="flex items-center justify-between border-b border-glass-border pb-4">
+        <h3 className="text-lg font-bold text-foreground">Discussion</h3>
+        <span className="text-xs font-semibold text-muted bg-surface-hover/50 px-2.5 py-1 rounded-full border border-glass-border">
           {comments.length} {comments.length === 1 ? "comment" : "comments"}
         </span>
       </div>
@@ -152,10 +152,10 @@ export default function CommentSection({ snippetId }: { snippetId: number }) {
               <img
                 src={currentProfile.avatar_url}
                 alt="Your Avatar"
-                className="w-10 h-10 rounded-full object-cover ring-2 ring-slate-800"
+                className="w-10 h-10 rounded-full object-cover ring-2 ring-glass-border"
               />
             ) : (
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500/30 to-purple-500/30 flex items-center justify-center text-sm font-bold text-indigo-300 ring-2 ring-slate-800">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-accent/30 to-accent-hover/30 flex items-center justify-center text-sm font-bold text-accent ring-2 ring-glass-border">
                 {currentProfile?.username?.charAt(0).toUpperCase() || "?"}
               </div>
             )}
@@ -165,7 +165,7 @@ export default function CommentSection({ snippetId }: { snippetId: number }) {
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
               placeholder="Add to the discussion..."
-              className="w-full min-h-[100px] resize-y rounded-xl bg-slate-900/50 border border-white/[0.06] p-4 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-accent/50 focus:border-accent/50 transition-all shadow-inner shadow-black/20"
+              className="w-full min-h-[100px] resize-y rounded-xl bg-background/50 border border-glass-border p-4 text-sm text-foreground placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-accent/50 focus:border-accent/50 transition-all shadow-inner shadow-black/20"
             />
             <div className="flex justify-end">
               <motion.button
@@ -180,11 +180,11 @@ export default function CommentSection({ snippetId }: { snippetId: number }) {
           </div>
         </form>
       ) : (
-        <div className="rounded-xl border border-white/[0.06] bg-slate-900/30 p-8 text-center backdrop-blur-sm">
-          <p className="text-slate-400 text-sm mb-4">You must be logged in to join the discussion.</p>
+        <div className="rounded-xl border border-glass-border bg-background/30 p-8 text-center backdrop-blur-sm">
+          <p className="text-muted text-sm mb-4">You must be logged in to join the discussion.</p>
           <Link
             href="/login"
-            className="inline-flex items-center justify-center px-6 py-2.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-white text-xs font-semibold tracking-wide transition-colors border border-white/[0.1]"
+            className="inline-flex items-center justify-center px-6 py-2.5 rounded-lg bg-surface-hover/80 hover:bg-surface-hover text-white text-xs font-semibold tracking-wide transition-colors border border-white/[0.1]"
           >
             Sign In
           </Link>
@@ -206,10 +206,10 @@ export default function CommentSection({ snippetId }: { snippetId: number }) {
                   <img
                     src={comment.profiles.avatar_url}
                     alt={comment.profiles.username}
-                    className="w-10 h-10 rounded-full object-cover ring-2 ring-transparent group-hover:ring-slate-700 transition-all"
+                    className="w-10 h-10 rounded-full object-cover ring-2 ring-transparent group-hover:ring-glass-border transition-all"
                   />
                 ) : (
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-slate-700 to-slate-800 flex items-center justify-center text-sm font-bold text-slate-300 ring-2 ring-transparent group-hover:ring-slate-700 transition-all">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-background to-background flex items-center justify-center text-sm font-bold text-foreground ring-2 ring-transparent group-hover:ring-glass-border transition-all">
                     {comment.profiles?.username?.charAt(0).toUpperCase() || "?"}
                   </div>
                 )}
@@ -219,15 +219,15 @@ export default function CommentSection({ snippetId }: { snippetId: number }) {
                 <div className="flex items-center gap-2">
                   <Link
                     href={`/profile/${comment.profiles?.username}`}
-                    className="text-sm font-bold text-slate-200 hover:text-accent hover:underline transition-colors"
+                    className="text-sm font-bold text-foreground hover:text-accent hover:underline transition-colors"
                   >
                     {comment.profiles?.username || "Unknown"}
                   </Link>
-                  <span className="text-[10px] text-slate-500 font-medium">
+                  <span className="text-[10px] text-muted font-medium">
                     {timeAgo(comment.created_at)}
                   </span>
                 </div>
-                <div className="text-sm text-slate-300 leading-relaxed whitespace-pre-wrap">
+                <div className="text-sm text-foreground leading-relaxed whitespace-pre-wrap">
                   {comment.content}
                 </div>
               </div>
@@ -236,7 +236,7 @@ export default function CommentSection({ snippetId }: { snippetId: number }) {
         </AnimatePresence>
 
         {comments.length === 0 && (
-          <div className="py-12 text-center text-slate-500 text-sm">
+          <div className="py-12 text-center text-muted text-sm">
             No comments yet. Be the first to start the discussion!
           </div>
         )}

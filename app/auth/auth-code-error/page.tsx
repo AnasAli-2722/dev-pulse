@@ -10,12 +10,12 @@ export default function AuthCodeErrorPage() {
           </svg>
         </div>
         <h1 className="text-xl font-bold text-white mb-2">Authentication Failed</h1>
-        <p className="text-sm text-slate-400 mb-6">
+        <p className="text-sm text-muted mb-6">
           Something went wrong during sign-in. This can happen if the link expired or was already used.
         </p>
         <Link
           href="/login"
-          className="inline-flex items-center gap-2 rounded-xl bg-accent hover:bg-accent-hover px-5 py-2.5 text-sm font-semibold text-white transition-colors shadow-lg shadow-indigo-500/20"
+          className="inline-flex items-center gap-2 rounded-xl bg-accent hover:bg-accent-hover px-5 py-2.5 text-sm font-semibold text-white transition-colors shadow-lg shadow-accent/20"
         >
           Try again
         </Link>

@@ -19,9 +19,9 @@ export default function SnippetFeed({ snippets }: SnippetFeedProps) {
   if (snippets.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-24 text-center">
-        <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-800/60 ring-1 ring-white/[0.06]">
+        <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-surface-hover/60 ring-1 ring-white/[0.06]">
           <svg
-            className="h-7 w-7 text-slate-500"
+            className="h-7 w-7 text-muted"
             fill="none"
             viewBox="0 0 24 24"
             strokeWidth={1.5}
@@ -34,10 +34,10 @@ export default function SnippetFeed({ snippets }: SnippetFeedProps) {
             />
           </svg>
         </div>
-        <h3 className="text-sm font-medium text-slate-300">
+        <h3 className="text-sm font-medium text-foreground">
           No snippets yet
         </h3>
-        <p className="mt-1 text-xs text-slate-500">
+        <p className="mt-1 text-xs text-muted">
           Create your first snippet to see it appear here.
         </p>
       </div>

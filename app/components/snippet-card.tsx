@@ -28,29 +28,29 @@ export type SnippetWithAuthor = Tables<"snippets"> & {
 const LANG_COLORS: Record<string, { bg: string; text: string }> = {
   javascript: { bg: "bg-amber-400/15", text: "text-amber-400" },
   typescript: { bg: "bg-blue-400/15", text: "text-blue-400" },
-  python: { bg: "bg-emerald-400/15", text: "text-emerald-400" },
+  python: { bg: "bg-success/15", text: "text-success" },
   rust: { bg: "bg-orange-400/15", text: "text-orange-400" },
   go: { bg: "bg-cyan-400/15", text: "text-cyan-400" },
   java: { bg: "bg-red-400/15", text: "text-red-400" },
-  c: { bg: "bg-slate-400/15", text: "text-slate-400" },
+  c: { bg: "bg-surface-hover/15", text: "text-muted" },
   "c++": { bg: "bg-pink-400/15", text: "text-pink-400" },
   "c#": { bg: "bg-violet-400/15", text: "text-violet-400" },
   ruby: { bg: "bg-rose-400/15", text: "text-rose-400" },
   swift: { bg: "bg-orange-300/15", text: "text-orange-300" },
-  kotlin: { bg: "bg-purple-400/15", text: "text-purple-400" },
+  kotlin: { bg: "bg-accent-hover/15", text: "text-purple-400" },
   dart: { bg: "bg-sky-400/15", text: "text-sky-400" },
-  php: { bg: "bg-indigo-400/15", text: "text-indigo-400" },
+  php: { bg: "bg-accent/15", text: "text-accent" },
   html: { bg: "bg-orange-500/15", text: "text-orange-500" },
   css: { bg: "bg-blue-500/15", text: "text-blue-500" },
   sql: { bg: "bg-yellow-400/15", text: "text-yellow-400" },
   shell: { bg: "bg-green-400/15", text: "text-green-400" },
   bash: { bg: "bg-green-400/15", text: "text-green-400" },
-  lua: { bg: "bg-indigo-300/15", text: "text-indigo-300" },
+  lua: { bg: "bg-accent/15", text: "text-accent" },
 };
 
 function getLangStyle(name: string) {
   const key = name.toLowerCase();
-  return LANG_COLORS[key] ?? { bg: "bg-slate-500/15", text: "text-slate-400" };
+  return LANG_COLORS[key] ?? { bg: "bg-surface-hover/15", text: "text-muted" };
 }
 
 /* ------------------------------------------------------------------ */
@@ -152,19 +152,19 @@ export default function SnippetCard({ snippet }: SnippetCardProps) {
       whileHover={{ y: -6, scale: 1.015 }}
       transition={{ type: "spring", stiffness: 320, damping: 20 }}
       className="group relative flex flex-col overflow-hidden rounded-2xl
-                 border border-white/[0.06]
-                 bg-gradient-to-br from-slate-900/80 via-slate-900/90 to-slate-950
+                 border border-glass-border
+                 bg-gradient-to-br from-background/80 via-surface/90 to-background
                  shadow-lg shadow-black/30
                  backdrop-blur-md
                  transition-shadow duration-300
-                 hover:shadow-xl hover:shadow-indigo-500/10
-                 hover:border-indigo-500/20
+                 hover:shadow-xl hover:shadow-accent/10
+                 hover:border-accent/20
                  cursor-pointer"
     >
       {/* ── Subtle top-edge gradient accent ── */}
       <div
         className="pointer-events-none absolute inset-x-0 top-0 h-px
-                    bg-gradient-to-r from-transparent via-indigo-500/40 to-transparent
+                    bg-gradient-to-r from-transparent via-accent/40 to-transparent
                     opacity-0 transition-opacity duration-300 group-hover:opacity-100"
       />
 
@@ -177,7 +177,7 @@ export default function SnippetCard({ snippet }: SnippetCardProps) {
           <span className="h-1.5 w-1.5 rounded-full bg-current opacity-80" />
           {langName}
         </span>
-        <time className="text-[9px] md:text-[11px] text-slate-500 tabular-nums">
+        <time className="text-[9px] md:text-[11px] text-muted tabular-nums">
           {timeAgo(snippet.updated_at ?? snippet.created_at)}
         </time>
       </header>
@@ -185,13 +185,13 @@ export default function SnippetCard({ snippet }: SnippetCardProps) {
       {/* ── Title & description ── */}
       <div className="px-5 pb-3">
         <h3
-          className="truncate text-sm md:text-[15px] font-semibold leading-snug text-slate-100
+          className="truncate text-sm md:text-[15px] font-semibold leading-snug text-foreground
                       group-hover:text-white transition-colors duration-200"
         >
           {snippet.title}
         </h3>
         {snippet.description && (
-          <p className="mt-1 line-clamp-2 text-[10px] md:text-xs leading-relaxed text-slate-400">
+          <p className="mt-1 line-clamp-2 text-[10px] md:text-xs leading-relaxed text-muted">
             {snippet.description}
           </p>
         )}
@@ -201,36 +201,36 @@ export default function SnippetCard({ snippet }: SnippetCardProps) {
       <div className="mx-4 mb-4 flex-1">
         <div
           className="relative overflow-hidden rounded-xl p-4
-                      bg-slate-950/70
+                      bg-background/70
                       shadow-[inset_2px_2px_6px_rgba(0,0,0,0.55),inset_-1px_-1px_4px_rgba(255,255,255,0.03)]
                       ring-1 ring-white/[0.04]"
         >
           {/* Line numbers + code */}
-          <pre className="overflow-hidden text-[9px] md:text-[11px] leading-[1.7] font-mono text-slate-400">
+          <pre className="overflow-hidden text-[9px] md:text-[11px] leading-[1.7] font-mono text-muted">
             <code>
               {preview
                 .split("\n")
                 .slice(0, 6)
                 .map((line, i) => (
                   <div key={i} className="flex gap-3">
-                    <span className="w-4 flex-shrink-0 text-right text-slate-600 select-none">
+                    <span className="w-4 flex-shrink-0 text-right text-muted select-none">
                       {i + 1}
                     </span>
-                    <span className="truncate text-slate-300/80">{line}</span>
+                    <span className="truncate text-foreground/80">{line}</span>
                   </div>
                 ))}
             </code>
           </pre>
 
           {/* Fade-out gradient at bottom */}
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-slate-950/90 to-transparent" />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-background/90 to-transparent" />
         </div>
       </div>
 
       {/* ── Footer: author + stats ── */}
       <footer
-        className="flex items-center justify-between border-t border-white/[0.04]
-                    bg-slate-950/40 px-5 py-3 relative z-20"
+        className="flex items-center justify-between border-t border-glass-border
+                    bg-background/40 px-5 py-3 relative z-20"
       >
         {/* Author */}
         <div
@@ -248,17 +248,17 @@ export default function SnippetCard({ snippet }: SnippetCardProps) {
               className="h-5 w-5 rounded-full ring-1 ring-white/10 object-cover group-hover:ring-white/30 transition-all"
             />
           ) : (
-            <div className="flex h-5 w-5 items-center justify-center rounded-full bg-indigo-500/20 text-[10px] font-bold text-indigo-400 ring-1 ring-indigo-500/20 group-hover:ring-indigo-500/40 transition-all">
+            <div className="flex h-5 w-5 items-center justify-center rounded-full bg-accent/20 text-[10px] font-bold text-accent ring-1 ring-accent/20 group-hover:ring-accent/40 transition-all">
               {snippet.profiles.username.charAt(0).toUpperCase()}
             </div>
           )}
-          <span className="truncate text-[10px] md:text-xs text-slate-400 font-medium group-hover:text-white transition-colors">
+          <span className="truncate text-[10px] md:text-xs text-muted font-medium group-hover:text-white transition-colors">
             {snippet.profiles.username}
           </span>
         </div>
 
         {/* Stats */}
-        <div className="flex items-center gap-3 text-slate-500">
+        <div className="flex items-center gap-3 text-muted">
           {/* Stars */}
           <span
             onClick={toggleStar}
@@ -290,7 +290,7 @@ export default function SnippetCard({ snippet }: SnippetCardProps) {
           {/* Forks */}
           <span className="inline-flex items-center gap-1 text-[10px] md:text-xs tabular-nums" title="Forks">
             <svg
-              className="h-3.5 w-3.5 text-slate-400/70"
+              className="h-3.5 w-3.5 text-muted/70"
               viewBox="0 0 16 16"
               fill="currentColor"
             >
@@ -305,7 +305,7 @@ export default function SnippetCard({ snippet }: SnippetCardProps) {
           {/* Views */}
           <span className="inline-flex items-center gap-1 text-[10px] md:text-xs tabular-nums" title="Views">
             <svg
-              className="h-3.5 w-3.5 text-slate-400/70"
+              className="h-3.5 w-3.5 text-muted/70"
               viewBox="0 0 20 20"
               fill="currentColor"
             >
