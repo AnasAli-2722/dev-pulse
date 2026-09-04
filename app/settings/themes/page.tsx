@@ -33,6 +33,8 @@ export default function SettingsThemesPage() {
               className="w-full md:w-1/2 rounded-xl bg-surface border border-glass-border px-4 py-2.5 text-xs md:text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-accent/40 transition-all"
             >
               <option value="deep-dark">Deep Dark</option>
+              <option value="deep-forest">Deep Forest</option>
+              <option value="crimson">Crimson Forge</option>
             </select>
           ) : (
             <div className="w-full md:w-1/2 h-10 rounded-xl bg-surface border border-glass-border animate-pulse" />

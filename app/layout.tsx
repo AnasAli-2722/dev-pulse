@@ -53,7 +53,7 @@ export default async function RootLayout({
           attribute="class"
           defaultTheme="deep-dark"
           enableSystem={false}
-          themes={['deep-dark']}
+          themes={['deep-dark', 'deep-forest', 'crimson']}
         >
           <AuroraBackground />
           {user && <Navbar user={user} username={username} userId={user.id} />}

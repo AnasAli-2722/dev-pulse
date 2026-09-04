@@ -22,6 +22,48 @@
   --warning: #f59e0b;
 }
 
+.deep-forest {
+  --background: #07110D;
+  --foreground: #ECFDF5;
+  --surface: #0B1813;
+  --surface-hover: #101F18;
+  --border: #1B3428;
+  --accent: #34D399;
+  --accent-hover: #6EE7B7;
+  --muted: #8BA99A;
+
+  /* Glassmorphism tokens */
+  --glass-bg: rgba(11, 24, 19, 0.6);
+  --glass-border: rgba(52, 211, 153, 0.15);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+
+  /* Feedback tokens */
+  --success: #10b981;
+  --error: #ef4444;
+  --warning: #f59e0b;
+}
+
+.crimson {
+  --background: #0C0809;
+  --foreground: #FFF1F2;
+  --surface: #150D0F;
+  --surface-hover: #1D1215;
+  --border: #382025;
+  --accent: #F43F5E;
+  --accent-hover: #FB7185;
+  --muted: #A98B91;
+
+  /* Glassmorphism tokens */
+  --glass-bg: rgba(21, 13, 15, 0.6);
+  --glass-border: rgba(244, 63, 94, 0.15);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+
+  /* Feedback tokens */
+  --success: #10b981;
+  --error: #ef4444;
+  --warning: #f59e0b;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
