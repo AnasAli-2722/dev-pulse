@@ -4,6 +4,7 @@ import "./globals.css";
 import { createClient } from "@/lib/supabase/server";
 import Navbar from "./components/navbar";
 import AuroraBackground from "./components/aurora-background";
+import { ThemeProvider } from "./components/theme-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -44,12 +45,20 @@ export default async function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased dark`}
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col bg-background text-foreground relative overflow-x-hidden">
-        <AuroraBackground />
-        {user && <Navbar user={user} username={username} userId={user.id} />}
-        <main className="flex-1">{children}</main>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="deep-dark"
+          enableSystem={false}
+          themes={['deep-dark']}
+        >
+          <AuroraBackground />
+          {user && <Navbar user={user} username={username} userId={user.id} />}
+          <main className="flex-1">{children}</main>
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -9,6 +9,7 @@ export const metadata = {
 
 const NAV_ITEMS = [
   { href: "/settings", label: "Profile", icon: "user" },
+  { href: "/settings/themes", label: "Themes", icon: "theme" },
   { href: "/settings/notifications", label: "Notifications", icon: "bell" },
   { href: "/settings/privacy", label: "Privacy", icon: "shield" },
   { href: "/settings/security", label: "Security", icon: "lock" },
@@ -33,6 +34,11 @@ const ICONS: Record<string, React.ReactNode> = {
   lock: (
     <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
       <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+    </svg>
+  ),
+  theme: (
+    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M9.53 16.122a3 3 0 0 0-5.78 1.128 2.25 2.25 0 0 1-2.4 2.245 4.5 4.5 0 0 0 8.4-2.245c0-.399-.078-.78-.22-1.128Zm0 0a15.998 15.998 0 0 0 3.388-1.62m-5.043-.025a15.994 15.994 0 0 1 1.622-3.395m3.42 3.42a15.995 15.995 0 0 0 4.764-4.648l3.813-3.814a1.5 1.5 0 0 0-2.12-2.122l-3.814 3.814a15.996 15.996 0 0 0-4.648 4.764Z" />
     </svg>
   ),
 };
