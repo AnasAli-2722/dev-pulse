@@ -144,8 +144,8 @@ body {
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    rgba(99, 102, 241, 0.4) 0%,
-    rgba(139, 92, 246, 0.2) 40%,
+    color-mix(in srgb, var(--accent) 40%, transparent) 0%,
+    color-mix(in srgb, var(--accent-hover) 20%, transparent) 40%,
     transparent 70%
   );
   animation:

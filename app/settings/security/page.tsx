@@ -210,7 +210,7 @@ export default function SecurityPage() {
       {/* ━━━ Email Change ━━━ */}
       <div className="glass-card rounded-2xl p-6">
         <h2 className="text-lg font-semibold text-white mb-1">Email Address</h2>
-        <p className="text-xs text-muted mb-5">Update your email. You'll need to confirm on both addresses.</p>
+        <p className="text-xs text-muted mb-5">Update your email. You&apos;ll need to confirm on both addresses.</p>
 
         {emailMsg && <div className="mb-4"><Alert type={emailMsg.type} text={emailMsg.text} onDismiss={() => setEmailMsg(null)} /></div>}
 

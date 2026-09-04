@@ -17,7 +17,7 @@ export default function AuroraBackground() {
           duration: 15,
           ease: "linear",
         }}
-        className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] rounded-full bg-cyan-500 opacity-20 blur-[120px] will-change-transform"
+        className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] rounded-full bg-accent opacity-20 blur-[120px] will-change-transform"
       />
       
       <motion.div
